@@ -111,6 +111,85 @@ def load_modis_mod03_geoloc(mod03_file='',params={}):
         lon = -9999.99
         lsm = -1
     return {'Longitude':lon, 'Latitude':lat, 'LandSeaMask':lsm, 'Datetime':[sdt,mdt,edt]}
+  
+# function name: load_modis_mod02_reflectance_1km
+# purpose: Read 2D uncorrected reflectance (raw data) from MODIS L1 MO(Y)D02 Product
+# input: mod02_file = {FILENAME}
+# output: Dictionary 'R??_uncorrectted', 'Latitude', masked 2D array, and Granule starting, middle, and ending times
+# usage: mod02_reflancetance = load_modis_mod02_reflance(mod02_file='...')
+# note: bi-directional reflectance = uncorrected reflectance / cos(solar zenith angle)
+
+def load_modis_mod02_reflectance_1km(m02_file='',band='',params={}):
+
+    m02_id = SD(m02_file,SDC.READ)
+
+    r250_id = m02_id.select('EV_250_Aggr1km_RefSB')
+    r250_scale = r250_id.attributes()['reflectance_scales']
+    r250_offset= r250_id.attributes()['reflectance_offsets']
+    n250 = r250_id.get()
+    r250 = np.asarray(n250,dtype='f4')
+    n_band = n250.shape[0]
+    for i_band in range(n_band):
+        r250[i_band,:,:] = (n250[i_band,:,:] + r250_offset[i_band]) * r250_scale[i_band]
+    index = np.where(n250>32767)
+    r250[index[0],index[1],index[2]] = -9999.99
+    r01 = np.squeeze(r250[0,:,:])
+    r02 = np.squeeze(r250[1,:,:])
+
+    r500_id = m02_id.select('EV_500_Aggr1km_RefSB')
+    r500_scale = r500_id.attributes()['reflectance_scales']
+    r500_offset= r500_id.attributes()['reflectance_offsets']
+    n500 = r500_id.get()
+    r500 = np.asarray(n500,dtype='f4')
+    n_band = n500.shape[0]
+    for i_band in range(n_band):
+        r500[i_band,:,:] = (n500[i_band,:,:] + r500_offset[i_band]) * r500_scale[i_band]
+    index = np.where(n500>32767)
+    r500[index[0],index[1],index[2]] = -9999.99
+    r03 = np.squeeze(r500[0,:,:])
+    r04 = np.squeeze(r500[1,:,:])
+    r05 = np.squeeze(r500[2,:,:])
+    r06 = np.squeeze(r500[3,:,:])
+    r07 = np.squeeze(r500[4,:,:])
+    
+    r1km_id = m02_id.select('EV_1KM_RefSB')
+    r1km_scale = r1km_id.attributes()['reflectance_scales']
+    r1km_offset= r1km_id.attributes()['reflectance_offsets']
+
+    n1km = r1km_id.get()
+    r1km = np.asarray(n1km,dtype='f4')
+    n_band = n1km.shape[0]
+    for i_band in range(n_band):
+        r1km[i_band,:,:] = (n1km[i_band,:,:] + r1km_offset[i_band]) * r1km_scale[i_band]
+    index = np.where(n1km>32767)
+    r1km[index[0],index[1],index[2]] = -9999.99
+    r08 = np.squeeze(r1km[0,:,:])
+    r09 = np.squeeze(r1km[1,:,:])
+    r10 = np.squeeze(r1km[2,:,:])
+    r11 = np.squeeze(r1km[3,:,:])
+    r12 = np.squeeze(r1km[4,:,:])
+    r13l = np.squeeze(r1km[5,:,:])
+    r13h = np.squeeze(r1km[6,:,:])
+    r14l = np.squeeze(r1km[7,:,:])
+    r14h = np.squeeze(r1km[8,:,:])
+    r15 = np.squeeze(r1km[9,:,:])
+    r16 = np.squeeze(r1km[10,:,:])
+    r17 = np.squeeze(r1km[11,:,:])
+    r18 = np.squeeze(r1km[12,:,:])
+    r19 = np.squeeze(r1km[13,:,:])
+    r26 = np.squeeze(r1km[14,:,:])
+    
+    m02_id.end()
+    
+    return {'R01_Uncorrected':r01, 'R02_Uncorrected':r02,
+            'R03_Uncorrected':r03, 'R04_Uncorrected':r04,
+            'R05_Uncorrected':r05, 'R06_Uncorrected':r06, 'R07_Uncorrected':r07,
+            'R08_Uncorrected':r08, 'R09_Uncorrected':r09,
+            'R10_Uncorrected':r10, 'R11_Uncorrected':r11, 'R12_Uncorrected':r12,
+            'R13l_Uncorrected':r13l, 'R13h_Uncorrected':r13h, 'R14l_Uncorrected':r14l, 'R14h_Uncorrected':r14h,
+            'R15_Uncorrected':r15, 'R16_Uncorrected':r16, 'R17_Uncorrected':r17, 'R18_Uncorrected':r18,
+            'R19_Uncorrected':r19, 'R26_Uncorrected':r26 }
+  
 
 # function name: load_collocate_viirs_dataset
 # purpose: Read 2D VIIRS dataset(s) into 1D array(s)
