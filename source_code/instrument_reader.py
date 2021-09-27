@@ -115,7 +115,7 @@ def load_modis_mod03_geoloc(mod03_file='',params={}):
 # function name: load_modis_mod02_reflectance_1km
 # purpose: Read 2D uncorrected reflectance (raw data) from MODIS L1 MO(Y)D02 Product
 # input: mod02_file = {FILENAME}
-# output: Dictionary 'R??_uncorrectted', 'Latitude', masked 2D array, and Granule starting, middle, and ending times
+# output: Dictionary 'R??_uncorrectted'
 # usage: mod02_reflancetance = load_modis_mod02_reflance(mod02_file='...')
 # note: bi-directional reflectance = uncorrected reflectance / cos(solar zenith angle)
 
@@ -189,7 +189,55 @@ def load_modis_mod02_reflectance_1km(m02_file='',band='',params={}):
             'R13l_Uncorrected':r13l, 'R13h_Uncorrected':r13h, 'R14l_Uncorrected':r14l, 'R14h_Uncorrected':r14h,
             'R15_Uncorrected':r15, 'R16_Uncorrected':r16, 'R17_Uncorrected':r17, 'R18_Uncorrected':r18,
             'R19_Uncorrected':r19, 'R26_Uncorrected':r26 }
-  
+ 
+# function name: load_modis_mod02_emission_1km
+# purpose: Read 2D radiance (IR) from MODIS L1 MO(Y)D02 Product
+# input: mod02_file = {FILENAME}
+# output: Dictionary 'Radxx'
+# usage: mod02_emission = load_modis_mod02_emission_1km(mod02_file='...')
+
+def load_modis_mod02_emission_1km(m02_file='',params={}):
+
+    m02_id = SD(m02_file,SDC.READ)
+    e1km_id = m02_id.select('EV_1KM_Emissive')
+    e1km_scale = e1km_id.attributes()['radiance_scales']
+    e1km_offset= e1km_id.attributes()['radiance_offsets']
+
+    n1km = e1km_id.get()
+    e1km = np.asarray(n1km,dtype='f4')
+    n_band = n1km.shape[0]
+    for i_band in range(n_band):
+        e1km[i_band,:,:] = (e1km[i_band,:,:] - e1km_offset[i_band]) * e1km_scale[i_band]
+    index = np.where(n1km>32767)
+    e1km[index[0],index[1],index[2]] = -9999.99
+    e20 = np.squeeze(e1km[0,:,:])
+    e21 = np.squeeze(e1km[1,:,:])
+    e22 = np.squeeze(e1km[2,:,:])
+    e23 = np.squeeze(e1km[3,:,:])
+    e24 = np.squeeze(e1km[4,:,:])
+    e25 = np.squeeze(e1km[5,:,:])
+    e27 = np.squeeze(e1km[6,:,:])
+    e28 = np.squeeze(e1km[7,:,:])
+    e29 = np.squeeze(e1km[8,:,:])
+    e30 = np.squeeze(e1km[9,:,:])
+    e31 = np.squeeze(e1km[10,:,:])
+    e32 = np.squeeze(e1km[11,:,:])
+    e33 = np.squeeze(e1km[12,:,:])
+    e34 = np.squeeze(e1km[13,:,:])
+    e35 = np.squeeze(e1km[14,:,:])
+    e36 = np.squeeze(e1km[15,:,:])
+
+    m02_id.end()
+
+    return {'Rad20':e20, 'Rad21':e21,
+            'Rad22':e22, 'Rad23':e23,
+            'Rad24':e24, 'Rad25':e25,
+            'Rad27':e27, 'Rad28':e28,
+            'Rad29':e29, 'Rad30':e30,
+            'Rad31':e31, 'Rad32':e32,
+            'Rad33':e33, 'Rad34':e34,
+            'Rad35':e35, 'Rad36':e36}
+
 
 # function name: load_collocate_viirs_dataset
 # purpose: Read 2D VIIRS dataset(s) into 1D array(s)
