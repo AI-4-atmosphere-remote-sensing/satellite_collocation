@@ -112,7 +112,7 @@ def load_modis_mod03_geoloc(mod03_file='',params={}):
         lsm = -1
     return {'Longitude':lon, 'Latitude':lat, 'LandSeaMask':lsm, 'Datetime':[sdt,mdt,edt]}
 
-# function name: load_viirs_dataset
+# function name: load_collocate_viirs_dataset
 # purpose: Read 2D VIIRS dataset(s) into 1D array(s)
 # input: viirs_file = {FILENAME}
 # input: viirs_along = {1D array of VIIRS along track indices, index starts from 0}
@@ -120,11 +120,11 @@ def load_modis_mod03_geoloc(mod03_file='',params={}):
 # input: selected_datasets = {Full name of selected 2D datasets}
 # output: 1D array(s) of selected datasets
 # note: viirs_along and viirs_cross must have the same number of elements
-# usage: viirs_datasets = load_viirs_dataset(viirs_file='VNP02MOD.A2013050.2306.001.2017291120825.nc',
-#                                            viirs_along=[0,3,6,100,300],viirs_along=[0,150,633,700,2000],
-#                                            selected_dataset=['observation_data/M02','observation_data/M05'])  
+# usage: viirs_datasets = load_collocate_viirs_dataset(viirs_file='VNP02MOD.A2013050.2306.001.2017291120825.nc',
+#                                                      viirs_along=[0,3,6,100,300],viirs_along=[0,150,633,700,2000],
+#                                                      selected_dataset=['observation_data/M02','observation_data/M05'])  
   
-def load_viirs_dataset(viirs_file='',viirs_along='',viirs_cross='',selected_datasets=''):
+def load_collocate_viirs_dataset(viirs_file='',viirs_along='',viirs_cross='',selected_datasets=''):
 
     ind = np.where(viirs_along>=0)
     if (len(ind)<=0):
