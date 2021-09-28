@@ -269,3 +269,44 @@ def load_collocate_viirs_dataset(viirs_file='',viirs_along='',viirs_cross='',sel
 
     return save_data  
   
+# function name: load_collocate_caliop_dataset
+# purpose: Read CALIPSO dataset(s)
+# input: calipso_file = {FILENAME} 
+# input: calipso_index = {1D array of CALIPSO profile indices, index starts from 0}
+# input: selected_datasets = {Full name of selected CALIPSO datasets}
+# output: 1D array(s) of selected datasets
+# usage: caliop_datasets = load_collocate_caliop_dataset(calipso_file='CAL_LID_L2_01kmCLay-Standard-V4-10.2017-01-01T05-38-12ZN.hdf',
+#                                                        calipso_index=[0,3,6,100,300],
+#                                                        selected_dataset=['Longitude','Latitude',
+#                                                        'IGBP_Surface_Type','Snow_Ice_Surface_Type',
+#                                                        'Number_Layers_Found','Feature_Classification_Flags'])  
+
+
+def load_collocate_caliop_dataset(calipso_file='',calipso_index='',selected_datasets=''):
+
+    ind = np.where(calipso_index>=0)
+    if (len(ind)<=0):
+        return
+
+    fid = SD(calipso_file,SDC.READ)
+
+    save_data = {}
+
+    for selected_dataset in selected_datasets:
+        print (selected_dataset)
+        dataset = np.squeeze(fid.select(selected_dataset).get())
+        n_dim = len(dataset.shape)
+        print ('Dimension',n_dim)
+        dims = dataset.shape
+        if (n_dim==1):
+            save_dataset = dataset[calipso_index[ind]]
+        if (n_dim==2):
+            save_dataset = dataset[calipso_index[ind],:]
+        if (n_dim==3):
+            save_dataset = dataset[calipso_index[ind],:,:]
+
+        save_data[selected_dataset] = save_dataset
+
+    fid.end()
+
+    return save_data
