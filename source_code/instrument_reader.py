@@ -14,6 +14,56 @@ import datetime
 import h5py
 from datetimerange import DateTimeRange
 
+# function name: get_modis_viirs_timerange
+# purpose: Get the Date Time Range of a set of MODIS or VIIRS file names
+# input: datetime_range = {FILENAMES}
+# output: list of Datetime Ranges
+# usage: modis_datetimeranges = get_modis_viirs_timerange(list_of_modis_filenames)
+#.       viirs_datetimeranges = get_modis_viirs_timerange(list_of_viirs_filenames)
+
+def get_modis_viirs_timerange(mvfiles):
+
+    n_file = len(mvfiles)
+    timerange = []
+
+    for i, mvfile in enumerate(mvfiles):
+        mvname = os.path.basename(mvfile)
+        pos = mvname.find('.A')
+        timeflag = mvname[pos+2:pos+14]
+        if (mvname[0] == 'M'):
+            granule = 4.9
+        if (mvname[0] == 'V'):
+            granule = 5.9
+
+        dt_start = datetime.datetime.strptime(timeflag,'%Y%j.%H%M')
+        dt_end = dt_start + datetime.timedelta(minutes=granule)
+        timerange.append( DateTimeRange(dt_start,dt_end) )
+
+    return timerange
+
+# function name: get_cris_timerange
+# purpose: Get the Date Time Range of a set of CrIS file names
+# input: datetime_range = {FILENAMES}
+# output: list of Datetime Ranges
+# usage: cris_datetimeranges = get_cris_timerange(list_of_cris_filenames)
+
+def get_cris_timerange(crisfiles):
+
+    n_file = len(crisfiles)
+    timerange = []
+
+    for i, crisfile in enumerate(crisfiles):
+        crisname = os.path.basename(crisfile)
+        pos = crisname.find('CRIS.')
+        timeflag = crisname[pos+5:pos+18]
+        granule = 5.9
+        dt_start = datetime.datetime.strptime(timeflag,'%Y%m%dT%H%M')
+        dt_end = dt_start + datetime.timedelta(minutes=granule)
+        timerange.append( DateTimeRange(dt_start,dt_end) )
+
+    return timerange 
+
+
 # function name: load_caliop_clayer1km_geoloc
 # purpose: Read 1D Latitude/Longitude/UTC_Time from CALIOP Level-2 Cloud Layer 1km Product
 # input: cal_1km_file = {FILENAME}
