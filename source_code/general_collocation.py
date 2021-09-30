@@ -31,6 +31,27 @@ def find_overlap(target_timerange,source_timeranges):
 
     return overlap_flag
 
+# function name: track_swath_collocation
+# purpose: Find Collocation Pixels from a track (1-D) of geolocations and a swath (2-D) of geolocations
+# input: track_lat, track_lon, track_time
+#        1-D lat/lon/time of a track of pixels (e.g., from CALIPSO/CATS/CloudSat)
+#        Datetime objects for all track pixels are needed (but can be identical) 
+# input: swath_lat, swath_lon, swath_time
+#        2-D lat/lon of a swath of pixels (e.g., from MODIS/VIIRS)
+#        only a single swath_time is needed for all pixels
+# input: swath_resolution
+#        native spatial resolution in kilometer of the swath data (e.g., MODIS=1, VIIRS=0.75)
+# input: maximum_distance, maximum_interval
+#        the maximum spatial distance (in kilometer) and maximum time interval (in minute) between a track pixel and a swath pixel
+#        e.g., 5km and 5 minutes, the code will find collocated pixel pairs with maximum spatial distance 5km and +/- 5minutes
+# output: Dictionary
+#.        'swath_index_x': 1-D array of x indices for collocated swath pixels (valid range >=0, -1 means no collocation)
+#         'swath_index_y': 1-D array of y indices for collocated swath pixels (valid range >=0, -1 means no collocation),
+#         'track_index_x': 1-D array of x indices for collocated track pixels (valid range >=0, -1 means no collocation)
+#         'swath_track_distance': 1-D array of distances between collocated swath and track pixels (valid range >=0, -9999.99 means no collocation)
+#         'swath_track_time_difference': 1-D array of time interval between collocated swath and track pixels 
+#                                        (>0 means swath observations are made before track pixels, <0 otherwise, -9999.99 means no collocation)
+# usage: overlap_flag = find_overlap(calipso_timerange,viirs_timeranges)
 
 def track_swath_collocation(track_lat='',track_lon='',track_time='',
                             swath_lat='',swath_lon='',swath_time='',swath_resolution='',
