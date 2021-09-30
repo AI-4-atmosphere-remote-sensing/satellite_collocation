@@ -99,3 +99,21 @@ def track_swath_collocation(track_lat='',track_lon='',track_time='',
 
         if (refine_dist.min() >= maximum_distance):
             continue
+
+        refine_ind = np.unravel_index(refine_dist.argmin(), refine_dist.shape)
+        swath_ind_x[profile_index[i_profile]] = refine_ind[0] + search_s1
+        swath_ind_y[profile_index[i_profile]] = refine_ind[1] + search_s2
+        swath_track_dist[profile_index[i_profile]] = refine_dist.min()
+        swath_track_tdif[profile_index[i_profile]] = (track_time[profile_index[i_profile]] - swath_time).total_seconds()/60.
+        track_ind_x[profile_index[i_profile]] = profile_index[i_profile]
+
+    uncollocated_index = np.where(track_ind_x<0)
+    if (len(uncollocated_index[0])>0):
+        swath_ind_x[uncollocated_index] = -1
+        swath_ind_y[uncollocated_index] = -1
+        swath_track_dist[uncollocated_index] = -9999.99
+        swath_track_tdif[uncollocated_index] = -9999.99
+    
+    return {'swath_index_x':swath_ind_x, 'swath_index_y':swath_ind_y,
+            'track_index_x':track_ind_x, 'swath_track_distance':swath_track_dist,
+            'swath_track_time_difference':swath_track_tdif}
