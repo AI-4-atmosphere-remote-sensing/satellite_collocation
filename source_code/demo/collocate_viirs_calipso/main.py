@@ -1,6 +1,11 @@
 # this is a demo to show how to collocate CALIPSO 1km Cloud Layer L2 product with VIIRS Data
 
+general_lib_path = '../../lib/'
+
 import sys
+
+sys.path.insert(1,general_lib_path)
+
 import instrument_reader as ir
 import general_collocation as gc
 import numpy as np
