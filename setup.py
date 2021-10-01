@@ -12,8 +12,8 @@ with open("requirements.txt") as f:
             install_requires.add(dep)
 
 setup(
-    author="Jianwu Wang",
-    author_email='jianwu@umbc.edu',
+    author="Chenxi Wang, Jianwu Wang",
+    author_email='{chenxi,jianwu}@umbc.edu',
     python_requires='>=3.5',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
@@ -25,21 +25,20 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="Modis",
+    description="satellite collocation code",
     entry_points={
         'console_scripts': [
-            'MODIS=MODIS.cli:main',
         ],
     },
     install_requires=list(install_requires),
     license="Apache Software License 2.0",
-    long_description="MODIS AGGREGATION",
+    long_description="satellite collocation",
     include_package_data=True,
-    keywords='MODIS_Aggregation',
-    name='MODIS_Aggregation',
+    keywords='satellite, collocation',
+    name='satellite_collocation',
     packages=find_packages(),
     test_suite='tests',
-    url='https://github.com/big-data-lab-umbc/MODIS_Aggregation',
+    url='https://github.com/AI-4-atmosphere-remote-sensing/satellite_collocation',
     version='0.1.0',
     zip_safe=False,
 )

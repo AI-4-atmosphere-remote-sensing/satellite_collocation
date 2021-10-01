@@ -1,13 +1,9 @@
 # this is a demo to show how to collocate CALIPSO 1km Cloud Layer L2 product with VIIRS Data
 
-general_lib_path = '../../lib/'
-
+from satellite_collocation import *
 import sys
-
-sys.path.insert(1,general_lib_path)
-
-import instrument_reader as ir
-import general_collocation as gc
+import satellite_collocation.instrument_reader as ir
+import satellite_collocation.general_collocation as gc
 import numpy as np
 import glob
 import os
@@ -19,9 +15,9 @@ maximum_distance = 5.0  #kilometer
 maximum_interval = 15.0 #minute
 viirs_resolution = 0.75 #kilometer
 
-clayer1km_path = '../'
-vnp03_path = '../'
-save_path = '../'
+clayer1km_path = '/umbc/rs/nasa-access/codes/chenxi_general_code_testing/testing_data/CAL_LID_L2_01kmCLay/'
+vnp03_path = '/umbc/rs/nasa-access/data/viirs_data/VNP03MOD/2017/001/'
+save_path = '/umbc/rs/nasa-access/users/jianwu/collocation-testing/data-output/'
 
 clayer1km_files = sorted(glob.glob(clayer1km_path+'*.hdf'))
 vnp03_files = sorted(glob.glob(vnp03_path+'*/*.nc'))
