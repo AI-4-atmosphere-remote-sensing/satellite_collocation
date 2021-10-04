@@ -68,9 +68,18 @@ def get_cris_timerange(crisfiles):
 # purpose: Read 2D Latitude/Longitude from GOES-R ABI L1 file
 # input: abi_l1_file = {FILENAME}
 # output: Dictionary 'Longitude', 'Latitude', and 'Space_Mask' masked 2D array
+# output: Full disk starting, middle, and ending times
 # usage: abi_l1_geo = load_abi_geoloc(abi_file='...')
 
 def load_abi_geoloc(abi_file='',params={}):
+    
+    abi_filename = os.path.basename(abi_file)
+    abi_startflag = abi_filename[abi_filename.find('_s')+2:abi_filename.find('_s')+15]
+    abi_endflag = abi_filename[abi_filename.find('_e')+2:abi_filename.find('_e')+15]
+    sdt = datetime.datetime.strptime(abi_startflag,'%Y%j%H%M%S')
+    edt = datetime.datetime.strptime(abi_endflag,'%Y%j%H%M%S')
+    dur_half = (edt-sdt)/2.0
+    mdt = sdt + datetime.timedelta(seconds=dur_half.seconds)
     
     #ABI Height:
     abi_height = 42164.16 #in kilometer
@@ -147,7 +156,7 @@ def load_abi_geoloc(abi_file='',params={}):
     lat[space_mask==0] = np.nan
     lon[space_mask==0] = np.nan
     
-    return {'Latitude':lat,'Longitude':lon,'Space_Mask':space_mask}
+    return {'Latitude':lat,'Longitude':lon,'Space_Mask':space_mask, 'Datetime':[sdt,mdt,edt]}
 
 # function name: load_caliop_clayer1km_geoloc
 # purpose: Read 1D Latitude/Longitude/UTC_Time from CALIOP Level-2 Cloud Layer 1km Product
