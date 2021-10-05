@@ -85,8 +85,8 @@ def targets_distance(target_lats, target_lons, granule_lat, granule_lon):
     #DDD:  Day of the year (e.g., 243)
     #HH:   Hour (0-23)
     #MM:   Minute (0-59)
-# input: lat, array of latitude in degree
-# input: lon, array of longitude in degree
+# input: lat, array of latitude in degree (-90~90)
+# input: lon, array of longitude in degree (-180~180)
 # lat and lon must have the same dimensions
 # output: SZA: solar zenith angle in degree (0~180)
 # output: SAA: solar azimuthal angle in degree (-180~180)
@@ -153,3 +153,48 @@ def calculate_solar_geometry(timeflag='',lat='',lon=''):
     saa[index4] = saa[index4] - 360.0
     
     return {'SZA':sza, 'SAA':saa}
+
+# function name: calculate_geostationary_geometry
+# purpose: Calculate viewing zenith angle and azimuthal angle for geostationary instruments
+# input: distance [optional]
+#        distance between satellite and center of the Earth in kilometer (42164.16 by default)
+# input: lat0 [optional], satellite projection latitude in degree (0 by default)
+# input: lon0, satellite projection longitude in degree (-180.0 ~ 180.0)
+# input: lat, array of latitude in degree (-90.0 ~ 90.0)
+# input: lon, array of longitude in degree (-180.0 ~ 180.0)
+# output: VZA: viewing zenith angle in degree (0~90)
+# output: VAA: viewing azimuthal angle in degree (-180~180)
+
+# usage: viewing_angles = calculate_geostationary_geometry(distance=42164.16,lon0=-75.0,lat=np.arange(10),lon=np.arange(10))
+
+def calculate_geostationary_geometry(distance=42164.16,lat0=0.0,lon0='',lat='',lon=''):
+    
+    relat_lonr = (lon - lon0) * pi/180.0
+    relat_latr = (lat - lat0) * pi/180.0
+    
+    beta = np.arccos( np.cos(relat_latr) * np.cos(relat_lonr) )
+    sin_beta = np.sin(beta)
+    cos_beta = np.cos(beta)
+    
+    #compute zenith angle
+    sin_vza = distance*sin_beta / np.sqrt(1.808e9 - 5.3725e8*cos_beta)
+    sin_vza[sin_vza>1] = 1.0
+    sin_vza[sin_vza<-1] = -1.0
+    #print (min(sin_vza))
+    vza = np.arcsin(sin_vza) / (pi/180.0)
+    
+    #comput azimuthal angle
+    sin_vaa = np.sin(relat_lonr) / sin_beta
+    sin_vaa[sin_vaa>1.0] = 1.0
+    sin_vaa[sin_vaa<-1.0] = -1.0
+    vaa = np.arcsin(sin_vaa) / (pi/180.0)
+    
+    index1 = np.where(relat_latr<0.0)
+    vaa[index1] = 180.0 - vaa[index1]
+    
+    index2 = np.where(vaa<0.0)
+    vaa[index2] = vaa[index2] + 360.0
+    
+    vaa = vaa - 180.0
+    
+    return {'VZA':vza, 'VAA':vaa}
