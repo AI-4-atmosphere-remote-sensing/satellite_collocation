@@ -138,4 +138,7 @@ def calculate_solar_geometry(timeflag='',lat='',lon=''):
     sza  = 90.0 - elev
     saa  = azim / (pi/180.0)
     
+    index4 = np.where( saa >= 180.0 )
+    saa[index4] = saa - 360.0
+    
     return {'SZA':sza, 'SAA':saa}
