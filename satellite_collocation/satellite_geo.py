@@ -77,8 +77,7 @@ def targets_distance(target_lats, target_lons, granule_lat, granule_lon):
 
     return distance
 
-
-def calculate_geos_geometry(timeflag='',lat='',lon=''):
+def calculate_solar_geometry(timeflag='',lat='',lon=''):
     
     #timeflag format: YYYYDDDHHMM
     #YYYY: year (e.g. 2018)
@@ -90,4 +89,53 @@ def calculate_geos_geometry(timeflag='',lat='',lon=''):
     hour= int(timeflag[7:9])
     minute=int(timeflag[9:11])
     
-    return
+    timefrac = hour*1.0+minute/60.0
+    
+    #calculate solar angles
+    tsm = timefrac + lon/15.0
+    lonr = lon*pi/180.0
+    latr = lat*pi/180.0
+    
+    a1 = (1.00554*doy-6.28306) * pi/180.0
+    a2 = (1.93946*doy + 23.35089) * pi/180.0
+    et = -7.67825*sin(a1) - 10.09176*sin(a2)
+    
+    tsv = tsm + et/60.0 - 12.0
+    
+    ah = tsv*15.0*pi/180.0
+    
+    a3 = (0.9683*doy - 78.00878)*pi/180.0
+    delta = 23.4856 * sin(a3) *pi/180.0
+    
+    cos_delta = cos(delta)
+    sin_delta = sin(delta)
+    cos_ah = np.cos(ah)
+    sin_latr = np.sin(latr)
+    cos_latr = np.cos(latr)
+    amuzero = sin_latr * sin_delta + cos_latr*cos_delta*cos_ah
+    
+    elev = np.arcsin(amuzero)
+    cos_elev = np.cos(elev)
+    
+    az = cos_delta * np.sin(ah) / cos_elev
+    caz = ( -cos_latr*sin_delta + sin_latr*cos_delta*cos_ah ) / cos_elev
+    
+    az[az>=1.0] = 1.0
+    az[az<=-1.0] = -1.0
+    azim = np.arcsin(az)
+    
+    index1 = np.where( caz<= 0 )
+    azim[index1] = pi - azim[index1]
+    index2 = np.where( (caz>0) & (az<=0) )
+    azim[index2] = 2.*pi+azim[index2]
+    
+    azim = azim + pi
+
+    index3 = np.where( azim>(pi*2.) )
+    azim[index3] = azim[index3] - pi*2.
+    
+    elev = elev / (pi/180.0)
+    sza  = 90.0 - elev
+    saa  = azim / (pi/180.0)
+    
+    return {'SZA':sza, 'SAA':saa}
