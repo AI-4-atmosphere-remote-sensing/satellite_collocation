@@ -62,6 +62,27 @@ def get_cris_timerange(crisfiles):
 
     return timerange 
 
+# function name: get_abi_timerange
+# purpose: Get the Date Time Range of a set of ABI file names
+# input: datetime_range = {FILENAMES}
+# output: list of Datetime Ranges
+# usage: abi_datetimeranges = get_abi_timerange(list_of_abi_filenames)
+
+def get_abi_timerange(abifiles):
+
+    n_file = len(abifiles)
+    timerange = []
+
+    for i, abifile in enumerate(abifiles):
+        abiname = os.path.basename(abifile)
+        pos = abiname.find('_s')
+        abi_startflag = abiname[abiname.find('_s')+2:abiname.find('_s')+15]
+        abi_endflag = abiname[abiname.find('_e')+2:abiname.find('_e')+15]
+        dt_start = datetime.datetime.strptime(abi_startflag,'%Y%m%dT%H%M')
+        dt_end = datetime.datetime.strptime(abi_endflag,'%Y%m%dT%H%M')
+        timerange.append( DateTimeRange(dt_start,dt_end) )
+
+    return timerange 
 
   
 # function name: load_abi_geoloc
