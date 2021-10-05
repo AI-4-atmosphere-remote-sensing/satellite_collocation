@@ -62,6 +62,7 @@ def get_cris_timerange(crisfiles):
 
     return timerange 
 
+
 # function name: get_abi_timerange
 # purpose: Get the Date Time Range of a set of ABI file names
 # input: datetime_range = {FILENAMES}
@@ -78,10 +79,10 @@ def get_abi_timerange(abifiles):
         pos = abiname.find('_s')
         abi_startflag = abiname[abiname.find('_s')+2:abiname.find('_s')+15]
         abi_endflag = abiname[abiname.find('_e')+2:abiname.find('_e')+15]
-        dt_start = datetime.datetime.strptime(abi_startflag,'%Y%m%dT%H%M')
-        dt_end = datetime.datetime.strptime(abi_endflag,'%Y%m%dT%H%M')
+        dt_start = datetime.datetime.strptime(abi_startflag,'%Y%j%H%M%S')
+        dt_end = datetime.datetime.strptime(abi_endflag,'%Y%j%H%M%S')
         timerange.append( DateTimeRange(dt_start,dt_end) )
-
+    
     return timerange 
 
   
