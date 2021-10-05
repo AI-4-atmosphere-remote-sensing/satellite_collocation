@@ -77,13 +77,24 @@ def targets_distance(target_lats, target_lons, granule_lat, granule_lon):
 
     return distance
 
-def calculate_solar_geometry(timeflag='',lat='',lon=''):
-    
+# function name: calculate_solar_geometry
+# purpose: Calculate solar zenith angle and azimuthal angle
+# input: timeflag
     #timeflag format: YYYYDDDHHMM
     #YYYY: year (e.g. 2018)
     #DDD:  Day of the year (e.g., 243)
     #HH:   Hour (0-23)
     #MM:   Minute (0-59)
+# input: lat, array of latitude in degree
+# input: lon, array of longitude in degree
+# lat and lon must have the same dimensions
+# output: SZA: solar zenith angle in degree (0~180)
+# output: SAA: solar azimuthal angle in degree (-180~180)
+
+# usage: solar_angles = calculate_solar_geometry(timeflag='20182250030',lat=np.arange(10),lon=np.arange(10))
+
+def calculate_solar_geometry(timeflag='',lat='',lon=''):
+
     year= int(timeflag[0:4])
     doy = int(timeflag[4:7])
     hour= int(timeflag[7:9])
