@@ -77,3 +77,17 @@ def targets_distance(target_lats, target_lons, granule_lat, granule_lon):
 
     return distance
 
+
+def calculate_geos_geometry(timeflag='',lat='',lon=''):
+    
+    #timeflag format: YYYYDDDHHMM
+    #YYYY: year (e.g. 2018)
+    #DDD:  Day of the year (e.g., 243)
+    #HH:   Hour (0-23)
+    #MM:   Minute (0-59)
+    year= int(timeflag[0:4])
+    doy = int(timeflag[4:7])
+    hour= int(timeflag[7:9])
+    minute=int(timeflag[9:11])
+    
+    return
