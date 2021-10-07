@@ -1,8 +1,8 @@
 # Description
 This folder shows examples on how to use our software.
 
-# Prerequisite: Instructions on Downloading Input Level-2 Data
-This section guides users to download the required MODIS Level-2 data for the following example runs.
+# Prerequisite: Instructions on Downloading Input VIIRS and CALIPSO Data
+This section guides users to download the required VIIRS and CALIPSO data for the following example runs.
 
 ## Requirement of Input Level-2 Data
 Our aggregation code requires the input Level-2 data to cover the time range of at least one day with additional 3 hours. The one-day data is minimum for aggregation of daily Level-3 data. The additional 3 hours after the selected day is for the adjustment of the new Definition of Day. Reference: Page 5 to 7 in [MODIS Atmosphere L3 Global Gridded Product Algorithm Theoretical Basis Document (ATBD) & Users Guide for C6.1 products: 08_D3, 08_E3, 08_M3](https://atmosphere-imager.gsfc.nasa.gov/sites/default/files/ModAtmo/documents/L3_ATBD_C6_C61_2020_08_06.pdf).
