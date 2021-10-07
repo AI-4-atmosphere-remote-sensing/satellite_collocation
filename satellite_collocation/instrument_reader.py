@@ -63,6 +63,123 @@ def get_cris_timerange(crisfiles):
     return timerange 
 
 
+# function name: get_abi_timerange
+# purpose: Get the Date Time Range of a set of ABI file names
+# input: datetime_range = {FILENAMES}
+# output: list of Datetime Ranges
+# usage: abi_datetimeranges = get_abi_timerange(list_of_abi_filenames)
+
+def get_abi_timerange(abifiles):
+
+    n_file = len(abifiles)
+    timerange = []
+
+    for i, abifile in enumerate(abifiles):
+        abiname = os.path.basename(abifile)
+        pos = abiname.find('_s')
+        abi_startflag = abiname[abiname.find('_s')+2:abiname.find('_s')+15]
+        abi_endflag = abiname[abiname.find('_e')+2:abiname.find('_e')+15]
+        dt_start = datetime.datetime.strptime(abi_startflag,'%Y%j%H%M%S')
+        dt_end = datetime.datetime.strptime(abi_endflag,'%Y%j%H%M%S')
+        timerange.append( DateTimeRange(dt_start,dt_end) )
+    
+    return timerange 
+
+  
+# function name: load_abi_geoloc
+# purpose: Read 2D Latitude/Longitude from GOES-R ABI L1 file
+# input: abi_l1_file = {FILENAME}
+# output: Dictionary 'Longitude', 'Latitude', and 'Space_Mask' masked 2D array
+# output: Full disk starting, middle, and ending times
+# usage: abi_l1_geo = load_abi_geoloc(abi_file='...')
+
+def load_abi_geoloc(abi_file='',params={}):
+    
+    abi_filename = os.path.basename(abi_file)
+    abi_startflag = abi_filename[abi_filename.find('_s')+2:abi_filename.find('_s')+15]
+    abi_endflag = abi_filename[abi_filename.find('_e')+2:abi_filename.find('_e')+15]
+    sdt = datetime.datetime.strptime(abi_startflag,'%Y%j%H%M%S')
+    edt = datetime.datetime.strptime(abi_endflag,'%Y%j%H%M%S')
+    dur_half = (edt-sdt)/2.0
+    mdt = sdt + datetime.timedelta(seconds=dur_half.seconds)
+    
+    #ABI Height:
+    abi_height = 42164.16 #in kilometer
+    h = abi_height
+    r_eq = 6378.1370 #km   semi-major axis
+    r_pol= 6356.7523 #km   semi-minor axis
+    d = h*h - r_eq*r_eq
+    f = (1.0/298.257222101)
+    fp = (1.0/((1.0-f)*(1.0-f)))
+    
+    #read constant
+    fid = Dataset(abi_file,'r')
+    x = fid.variables['x']
+    y = fid.variables['y']
+    lamda   = x[:]
+    theta   = y[:]
+    proj = fid.variables['goes_imager_projection']
+    lon0 = getattr(proj,'longitude_of_projection_origin')
+    lat0 = getattr(proj,'latitude_of_projection_origin')
+    
+    fid.close()
+    
+    #calculate lat/lon 
+    nx = len(lamda)
+    ny = len(theta)
+    
+    lat = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
+    lon = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
+    c1  = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
+    c2  = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
+    sd  = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
+    sn  = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
+    s1  = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
+    s2  = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
+    s3  = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
+    sxy = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
+    
+    lamda_geos = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
+    theta_geos = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
+    space_mask = np.zeros([ny,nx],dtype=np.int8)
+    
+    for j in range(ny):
+        lamda_geos[j,:] = np.arctan( np.tan(lamda)/np.cos(theta[j]) )
+        theta_geos[j,:] = np.arcsin( np.sin(theta[j])*np.cos(lamda) )
+
+    c1 = (h * np.cos(lamda_geos) * np.cos(theta_geos)) * (h * np.cos(lamda_geos) * np.cos(theta_geos))
+    c2 = (np.cos(theta_geos) * np.cos(theta_geos) + fp * np.sin(theta_geos) * np.sin(theta_geos)) * d
+    valid_ind = np.where(c1>=c2)
+    
+    sd[valid_ind] = np.sqrt(c1[valid_ind]-c2[valid_ind])
+    cosx = np.cos(lamda_geos[valid_ind])
+    cosy = np.cos(theta_geos[valid_ind])
+    sinx = np.sin(lamda_geos[valid_ind])
+    siny = np.sin(theta_geos[valid_ind])
+    
+    sn[valid_ind] = ( (h * cosx * cosy - sd[valid_ind]) /
+                      (cosy * cosy + fp * siny * siny) )
+    s1[valid_ind] = h - sn[valid_ind] * cosx * cosy
+    s2[valid_ind] = sn[valid_ind] * sinx * cosy
+    s3[valid_ind] = -1.0 * sn[valid_ind] * siny
+    
+    sxy[valid_ind] = np.sqrt(s1[valid_ind]*s1[valid_ind] + s2[valid_ind]*s2[valid_ind])
+    lon[valid_ind] = np.arctan(s2[valid_ind]/s1[valid_ind]) + lon0 * pi/180.0
+    lat[valid_ind] = np.arctan(-1.0*fp*(s3[valid_ind]/sxy[valid_ind]))
+    
+    lon[valid_ind] = lon[valid_ind] * 180.0/pi
+    lat[valid_ind] = lat[valid_ind] * 180.0/pi
+    
+    lon[lon<-180.0] += 360.0
+    lon[lon >180.0] += -360.0
+    
+    valid = np.where( (abs(lat)<=90) & (abs(lon)<=180) )
+    space_mask[valid] = 1
+    lat[space_mask==0] = np.nan
+    lon[space_mask==0] = np.nan
+    
+    return {'Latitude':lat,'Longitude':lon,'Space_Mask':space_mask, 'Datetime':[sdt,mdt,edt]}
+
 # function name: load_caliop_clayer1km_geoloc
 # purpose: Read 1D Latitude/Longitude/UTC_Time from CALIOP Level-2 Cloud Layer 1km Product
 # input: cal_1km_file = {FILENAME}
