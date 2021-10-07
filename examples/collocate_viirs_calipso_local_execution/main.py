@@ -15,9 +15,9 @@ maximum_distance = 5.0  #kilometer
 maximum_interval = 15.0 #minute
 viirs_resolution = 0.75 #kilometer
 
-clayer1km_path = '/umbc/rs/nasa-access/codes/chenxi_general_code_testing/testing_data/CAL_LID_L2_01kmCLay/'
-vnp03_path = '/umbc/rs/nasa-access/data/viirs_data/VNP03MOD/2017/001/'
-save_path = '/umbc/rs/nasa-access/users/jianwu/collocation-testing/data-output/'
+clayer1km_path = '/home/jianwu/nasa-access/users/jianwu/collocation-test-data/CALIPSO-L2-01km-CLayer/'
+vnp03_path = '/home/jianwu/nasa-access/users/jianwu/collocation-test-data/VNP03MOD-VIIRS-Coordinates/'
+save_path = '/home/jianwu/nasa-access/users/jianwu/collocation-test-data/collocation-output/'
 
 clayer1km_files = sorted(glob.glob(clayer1km_path+'*.hdf'))
 vnp03_files = sorted(glob.glob(vnp03_path+'*/*.nc'))
