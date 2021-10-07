@@ -12,7 +12,7 @@ from math import *
 import datetime
 from datetimerange import DateTimeRange
 
-import satellite_geo as sg
+import satellite_collocation.satellite_geo as sg
 
 
 # function name: find_overlap
