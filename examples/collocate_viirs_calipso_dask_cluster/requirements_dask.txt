@@ -1,8 +1,8 @@
+dask
+dask_jobqueue
+distributed
 netCDF4
 h5py
-dask
-distributed
-xarray
+pyhdf
 pandas
-pytest
-matplotlib
+DateTimeRange
