@@ -9,8 +9,8 @@ from dask_jobqueue import SLURMCluster
 from dask.distributed import Client, LocalCluster
 from dask.distributed import wait
 
-import instrument_reader as ir
-import general_collocation as gc
+import satellite_collocation.instrument_reader as ir
+import satellite_collocation.general_collocation as gc
 import numpy as np
 import glob
 import os
@@ -78,25 +78,25 @@ if __name__ =='__main__':
     maximum_interval = 15.0 #minute
     viirs_resolution = 0.75 #kilometer
 
-    clayer1km_path = '../'
-    vnp03_path = '../'
-    save_path = '../'
+    clayer1km_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/CALIPSO-L2-01km-CLayer/'
+    vnp03_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/VNP03MOD-VIIRS-Coordinates/'
+    save_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/collocation-output/'
 
     clayer1km_files = sorted(glob.glob(clayer1km_path+'*.hdf'))
     vnp03_files = sorted(glob.glob(vnp03_path+'*/*.nc'))
 
-	cluster = SLURMCluster(cores=32, memory='390 GB',processes=32, project='pi_jianwu',\
-		queue='high_mem', walltime='16:00:00', job_extra=['--exclusive', '--qos=medium+'])
-	cluster.scale(jobs=8)
-	print(cluster.job_script())
-	client = Client(cluster)
-	#print("varnames:", varnames)
-	#print("")
-	#print("kwargv:", kwargv)
-	#client = Client()
-	tt = client.map(collocate_viirs_calipso, clayer1km_files, vnp03_files, **kwargv)
+    cluster = SLURMCluster(cores=32, memory='390 GB',processes=32, project='pi_jianwu',\
+        queue='high_mem', walltime='16:00:00', job_extra=['--exclusive', '--qos=medium+'])
+    cluster.scale(jobs=8)
+    print(cluster.job_script())
+    client = Client(cluster)
+    #print("varnames:", varnames)
+    #print("")
+    #print("kwargv:", kwargv)
+    #client = Client()
+    tt = client.map(collocate_viirs_calipso, clayer1km_files, vnp03_files, **kwargv)
 
-	# aggregate the result
-	for future, result in as_completed(tt, with_results= True):
-		for key in result:
-            print result
+    # aggregate the result
+    for future, result in as_completed(tt, with_results= True):
+        for key in result:
+            print(result)
