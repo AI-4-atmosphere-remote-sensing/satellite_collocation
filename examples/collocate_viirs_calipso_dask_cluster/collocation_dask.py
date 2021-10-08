@@ -94,7 +94,7 @@ if __name__ =='__main__':
     #print("")
     #print("kwargv:", kwargv)
     #client = Client()
-    tt = client.map(collocate_viirs_calipso, clayer1km_files, vnp03_files, **kwargv)
+    tt = client.map(collocate_viirs_calipso, clayer1km_files, vnp03_files)
 
     # aggregate the result
     for future, result in as_completed(tt, with_results= True):
