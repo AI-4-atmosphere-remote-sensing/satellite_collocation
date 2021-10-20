@@ -83,7 +83,7 @@ if __name__ =='__main__':
     save_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/collocation-output/'
 
     clayer1km_files = sorted(glob.glob(clayer1km_path+'*.hdf'))
-    vnp03_files = sorted(glob.glob(vnp03_path+'*/*.nc'))
+    vnp03_files = sorted(glob.glob(vnp03_path+'*.nc'))
 
     cluster = SLURMCluster(cores=32, memory='390 GB',processes=32, project='pi_jianwu',\
         queue='high_mem', walltime='16:00:00', job_extra=['--exclusive', '--qos=medium+'])

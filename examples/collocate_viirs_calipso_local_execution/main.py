@@ -20,12 +20,13 @@ vnp03_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/VNP03MOD-V
 save_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/collocation-output/'
 
 clayer1km_files = sorted(glob.glob(clayer1km_path+'*.hdf'))
-vnp03_files = sorted(glob.glob(vnp03_path+'*/*.nc'))
+vnp03_files = sorted(glob.glob(vnp03_path+'*.nc'))
 vnp_timeranges = ir.get_modis_viirs_timerange(vnp03_files)
+print ('vnp_timeranges:', vnp_timeranges)
 
 for clayer1km_file in clayer1km_files:
 
-    #print (clayer1km_file)
+    print (clayer1km_file)
     cal_name = os.path.basename(clayer1km_file)
     pos = cal_name.find('V4-10.')
     cal_timeflag = cal_name[pos+6:pos+27]
