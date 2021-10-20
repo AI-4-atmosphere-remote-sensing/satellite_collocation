@@ -15,3 +15,4 @@ conda create -n satellite_collocation -c conda-forge python=3.7 libnetcdf netCDF
 #### Run CALIPSO-VIIRS Collocation
 ##### Download CALIPSO Data
 Step 1: Create an account or sign in on [NASA Earthdata](https://urs.earthdata.nasa.gov/)
+Step 2: Use [Python3 Code](https://forum.earthdata.nasa.gov/viewtopic.php?f=7&t=2330&sid=cbc21236b1005808dbe9dbacf066c027) to download single file or whole folders
