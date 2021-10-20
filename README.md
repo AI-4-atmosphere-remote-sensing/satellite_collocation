@@ -11,3 +11,6 @@ conda create -n satellite_collocation -c conda-forge python=3.7 libnetcdf netCDF
 >> cd satellite_collocation
 >> python setup.py install
 ```
+### Run Examples
+#### Run CALIPSO-VIIRS Collocation
+##### Download CALIPSO Data
