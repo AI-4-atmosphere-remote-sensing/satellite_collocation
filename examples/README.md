@@ -54,3 +54,9 @@ There are five datasets in each saved file:
 
 1) CALIPSO_Track_Index: 1-D integer array of collocated CALIPSO Profile ID. Valid Range[>= 0], no collocation if less than 0.
 
+
+2) VIIRS_CrossTrack_Index and VIIRS_AlongTrack_Index: 2 1-D integer arrays of collocated VIIRS Across Track and Along Track IDs. Valid Range[>= 0], no collocation if less than 0.
+
+3) CALIPSO_VIIRS_Distance: 1-D array of the spatial distances (in kilometer) between collocated CALIPSO and VIIRS pixels. Valid Range [0.0 ~ maximum_distance], no collocation if less than 0.
+
+4) CALIPSO_VIIRS_Interval: 1-D array of the observation time differences (in minutes) between collocated CALIPSO and VIIRS pixels. Valid Range [-maximum_interval ~ maximum_interval].
