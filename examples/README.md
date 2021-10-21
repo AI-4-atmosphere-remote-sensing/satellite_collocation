@@ -48,4 +48,9 @@ Simply type "python main.py"
 
 #### 1.4 Output:
 
-The collocation file will be named with "CAL_" + $CALIPSO_Timeflag + "_VNP_" + $VIIRS_Timeflag + "_Index.h5" and saved in the $SAVE_Path folder
+The collocation file will be named with "CAL_" + $CALIPSO_Timeflag + "_VNP_" + $VIIRS_Timeflag + "_Index.h5" and saved in HDF5 format in the $SAVE_Path folder.
+
+There are five datasets in each saved file:
+
+1) CALIPSO_Track_Index: 1-D integer array of collocated CALIPSO Profile ID. Valid Range[>= 0], no collocation if less than 0.
+
