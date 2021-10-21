@@ -19,13 +19,14 @@ from datetimerange import DateTimeRange
 
 def collocate_viirs_calipso(clayer1km_file, vnp03_file):
 
-    vnp_timeranges = ir.get_modis_viirs_timerange(vnp03_file)
+    print ('clayer1km_file:', clayer1km_file)
+    print ('vnp03_file:', vnp03_file)
+    vnp_timeranges = ir.get_modis_viirs_timerange([vnp03_file])
 
-    #print (clayer1km_file)
     cal_name = os.path.basename(clayer1km_file)
     pos = cal_name.find('V4-10.')
     cal_timeflag = cal_name[pos+6:pos+27]
-    #print (cal_timeflag)
+    print (cal_timeflag)
 
     clayer1km_geo = ir.load_caliop_clayer1km_geoloc(cal_1km_file=clayer1km_file)
     caliop_dts = clayer1km_geo['Profile_Datetime']
@@ -85,18 +86,18 @@ if __name__ =='__main__':
     clayer1km_files = sorted(glob.glob(clayer1km_path+'*.hdf'))
     vnp03_files = sorted(glob.glob(vnp03_path+'*.nc'))
 
+    #create a slurm cluster and get its client 
+    '''
     cluster = SLURMCluster(cores=32, memory='390 GB',processes=32, project='pi_jianwu',\
         queue='high_mem', walltime='16:00:00', job_extra=['--exclusive', '--qos=medium+'])
-    cluster.scale(jobs=8)
+    cluster.scale(jobs=2)
     print(cluster.job_script())
     client = Client(cluster)
-    #print("varnames:", varnames)
-    #print("")
-    #print("kwargv:", kwargv)
-    #client = Client()
+    '''
+    #create a client at the same node, useful for debugging
+    client = Client()
     tt = client.map(collocate_viirs_calipso, clayer1km_files, vnp03_files)
 
     # aggregate the result
     for future, result in as_completed(tt, with_results= True):
-        for key in result:
-            print(result)
+        print(result)
