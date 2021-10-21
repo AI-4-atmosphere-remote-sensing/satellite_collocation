@@ -46,3 +46,6 @@ save_path = '$SAVE_Path'
 
 Simply type "python main.py"
 
+#### 1.4 Output:
+
+The collocation file will be named with "CAL_" + $CALIPSO_Timeflag + "_VNP_" + $VIIRS_Timeflag + "_Index.h5" and saved in the $SAVE_Path folder
