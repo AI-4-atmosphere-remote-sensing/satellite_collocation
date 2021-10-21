@@ -16,4 +16,7 @@
 #              Cloud_Effective_Emissivity
 #              cloud_fraction_CM         
 #              Cloud_Top_Height          
+source /home/jianwu/.bashrc
+source /home/jianwu/.bash_profile
+conda activate satellite_collocation
 python3 collocation_dask.py
