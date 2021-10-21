@@ -21,3 +21,18 @@ Step 1: Create an account or sign in on [NASA Earthdata](https://urs.earthdata.n
 Step 2: To run the example code, you need [VIIRS/NPP Moderate Resolution Terrain-Corrected Geolocation L1 6-Min Swath 750 m](https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/5200/VNP03MOD/)
 
 Step 3: Use [scripts](https://ladsweb.modaps.eosdis.nasa.gov/tools-and-services/data-download-scripts/#python) to download VIIRS Data
+
+#### 1.2 Modify the Example Code:
+
+Step 1: Select appropriate the time and distance thresholds for collocation code:
+maximum_distance = 5.0  #kilometer
+maximum_interval = 15.0 #minute
+
+Step 2: Tell code the spatial resolution of VIIRS (or other passive instrument):
+viirs_resolution = 0.75 #kilometer
+
+Step 3: Specify locations of CALIPSO and VIIRS data and where you want to save the output files:
+clayer1km_path = '$CALIPSO_CLAYER_1KM_Path'
+vnp03_path = '$VIIRS_VNP03_MOD_Path'
+save_path = '$SAVE_Path'
+
