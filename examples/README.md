@@ -25,14 +25,20 @@ Step 3: Use [scripts](https://ladsweb.modaps.eosdis.nasa.gov/tools-and-services/
 #### 1.2 Modify the Example Code:
 
 Step 1: Select appropriate the time and distance thresholds for collocation code:
+
 maximum_distance = 5.0  #kilometer
+
 maximum_interval = 15.0 #minute
 
 Step 2: Tell code the spatial resolution of VIIRS (or other passive instrument):
+
 viirs_resolution = 0.75 #kilometer
 
 Step 3: Specify locations of CALIPSO and VIIRS data and where you want to save the output files:
+
 clayer1km_path = '$CALIPSO_CLAYER_1KM_Path'
+
 vnp03_path = '$VIIRS_VNP03_MOD_Path'
+
 save_path = '$SAVE_Path'
 
