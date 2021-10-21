@@ -42,3 +42,7 @@ vnp03_path = '$VIIRS_VNP03_MOD_Path'
 
 save_path = '$SAVE_Path'
 
+#### 1.3 Run the Example Code:
+
+Simply type "python main.py"
+
