@@ -73,3 +73,13 @@ for clayer1km_file in clayer1km_files:
             n_col =  len(np.where(caliop_ind>=0)[0])
             print("Collocated pixels: %5d" % n_col)
             print ( '' )
+            
+        #save co-location indices to files
+        sav_name = 'CAL_' + cal_timeflag + '_VNP_' + vnp_timeflag + '_Index.h5'
+        sav_id = h5py.File(save_path+sav_name,'w')
+        sav_id.create_dataset('CALIPSO_Track_Index',data=collocation_indexing['track_index_x'])
+        sav_id.create_dataset('VIIRS_CrossTrack_Index',data=collocation_indexing['swath_index_y'])
+        sav_id.create_dataset('VIIRS_AlongTrack_Index',data=collocation_indexing['swath_index_x'])
+        sav_id.create_dataset('CALIPSO_VIIRS_Distance',data=collocation_indexing['swath_track_distance'])
+        sav_id.create_dataset('CALIPSO_VIIRS_Interval',data=collocation_indexing['swath_track_time_difference'])
+        sav_id.close() 
