@@ -17,11 +17,11 @@ import os
 import h5py
 from datetimerange import DateTimeRange
 
-def collocate_viirs_calipso(clayer1km_file, vnp03_file):
+def collocate_viirs_calipso(clayer1km_file, vnp03_files):
 
     print ('clayer1km_file:', clayer1km_file)
-    print ('vnp03_file:', vnp03_file)
-    vnp_timeranges = ir.get_modis_viirs_timerange([vnp03_file])
+    print ('vnp03_files:', vnp03_files)
+    vnp_timeranges = ir.get_modis_viirs_timerange(vnp03_files)
 
     cal_name = os.path.basename(clayer1km_file)
     pos = cal_name.find('V4-10.')
@@ -85,6 +85,7 @@ if __name__ =='__main__':
 
     clayer1km_files = sorted(glob.glob(clayer1km_path+'*.hdf'))
     vnp03_files = sorted(glob.glob(vnp03_path+'*.nc'))
+    kwargv = { "vnp03_files": vnp03_files}
 
     #create a slurm cluster and get its client 
     '''
@@ -96,8 +97,8 @@ if __name__ =='__main__':
     '''
     #create a client at the same node, useful for debugging
     client = Client()
-    tt = client.map(collocate_viirs_calipso, clayer1km_files, vnp03_files)
+    tt = client.map(collocate_viirs_calipso, clayer1km_files, **kwargv)
 
     # aggregate the result
     for future, result in as_completed(tt, with_results= True):
-        print(result)
+        print("result", result)
