@@ -88,15 +88,15 @@ if __name__ =='__main__':
     kwargv = { "vnp03_files": vnp03_files}
 
     #create a slurm cluster and get its client 
-    '''
+    
     cluster = SLURMCluster(cores=32, memory='390 GB',processes=32, project='pi_jianwu',\
         queue='high_mem', walltime='16:00:00', job_extra=['--exclusive', '--qos=medium+'])
     cluster.scale(jobs=2)
     print(cluster.job_script())
     client = Client(cluster)
-    '''
+    
     #create a client at the same node, useful for debugging
-    client = Client()
+    #client = Client()
     tt = client.map(collocate_viirs_calipso, clayer1km_files, **kwargv)
 
     # aggregate the result
