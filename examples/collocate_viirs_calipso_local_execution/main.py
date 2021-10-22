@@ -17,6 +17,7 @@ viirs_resolution = 0.75 #kilometer
 
 clayer1km_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/CALIPSO-L2-01km-CLayer/'
 vnp03_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/VNP03MOD-VIIRS-Coordinates/'
+vnp02_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/VNP02MOD-VIIRS-Attributes/'
 save_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/collocation-output/'
 
 clayer1km_files = sorted(glob.glob(clayer1km_path+'*.hdf'))
@@ -83,3 +84,26 @@ for clayer1km_file in clayer1km_files:
         sav_id.create_dataset('CALIPSO_VIIRS_Distance',data=collocation_indexing['swath_track_distance'])
         sav_id.create_dataset('CALIPSO_VIIRS_Interval',data=collocation_indexing['swath_track_time_difference'])
         sav_id.close() 
+
+        #load collocated dataset(s) from CALIPSO and VIIRS
+        calipso_dataset_names = ['Longitude','Latitude','Layer_Top_Temperature','Layer_Top_Pressure',
+                            'IGBP_Surface_Type','Snow_Ice_Surface_Type','Number_Layers_Found',
+                            'Feature_Classification_Flags']
+
+        caliop_data = ir.load_collocate_caliop_dataset(calipso_file=clayer1km_file,calipso_index=collocation_indexing['track_index_x'],
+                      selected_datasets=calipso_dataset_names)
+
+        vnp02_file = glob.glob(vnp02_path+'*'+vnp_timeflag+'*.nc')
+        if (len(vnp02_file)!=1):
+            continue
+        viirs_02_datasets = ['/observation_data/M01', '/observation_data/M02', '/observation_data/M03',
+                             '/observation_data/M04', '/observation_data/M05', '/observation_data/M06',
+                             '/observation_data/M07', '/observation_data/M08', '/observation_data/M09',
+                             '/observation_data/M10', '/observation_data/M11', '/observation_data/M12',
+                             '/observation_data/M13', '/observation_data/M14', '/observation_data/M15',
+                             '/observation_data/M16']
+        viirs_data = ir.load_collocate_viirs_dataset(viirs_file=vnp02_file[0],viirs_along=collocation_indexing['swath_index_y'],
+                     viirs_cross=collocation_indexing['swath_index_x'],selected_datasets=viirs_02_datasets)
+        
+        #finished
+        #You are able to save collocated CALIPSO data (caliop_data) and VIIRS data (viirs_data) to any files.
