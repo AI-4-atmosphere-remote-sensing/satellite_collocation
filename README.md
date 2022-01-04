@@ -12,6 +12,8 @@ conda create -n satellite_collocation -c conda-forge python=3.7 libnetcdf netCDF
 >> python setup.py install
 ```
 ### Run Examples
+Please check the [examples](examples) folder to see sample codes to import the library and use its functions for specific examples. The examples mainly demonstrate how to conduct local execution and Dask-based distributed execution. 
+
 #### Run CALIPSO-VIIRS Collocation
 ##### Download CALIPSO Data
 Step 1: Create an account or sign in on [NASA Earthdata](https://urs.earthdata.nasa.gov/)
