@@ -1,5 +1,5 @@
 # Description
-This repository provide a toolkit that collocates data from two or more satellites.
+This repository provides a toolkit that collocates data from two or more satellites.
 
 
 ### Installation
