@@ -10,15 +10,39 @@ import os
 import h5py
 from datetimerange import DateTimeRange
 
-#collocate caliop with viirs
-maximum_distance = 5.0  #kilometer
-maximum_interval = 15.0 #minute
-viirs_resolution = 0.75 #kilometer
+import argparse
+import string
 
-clayer1km_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/CALIPSO-L2-01km-CLayer/'
-vnp03_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/VNP03MOD-VIIRS-Coordinates/'
-vnp02_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/VNP02MOD-VIIRS-Attributes/'
-save_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/collocation-output/'
+parser = argparse.ArgumentParser(description='This code is an example of collocating CALIPSO and VIIRS')
+parser.add_argument('-md','--maximum_distance', help='Define the maximum distance of collocated pixels in kilometer', required=True)
+parser.add_argument('-mt','--maximum_timeinterval', help='Define the maximum time interval of collocated pixels in minutes',required=True)
+parser.add_argument('-sr','--swath_resolution', help='Define the pixel resolution of swath instrument in kilometer', required=True)
+parser.add_argument('-tp','--track_instrument_path', help='Define the path of CALIPSO L2 files', required=True)
+parser.add_argument('-sgp','--swath_geo_path', help='Define the path of VIIRS VNP03 files', required=True)
+parser.add_argument('-sdp','--swath_data_path', help='Define the path of VIIRS VNP02 files', required=True)
+parser.add_argument('-sp','--save_path', help='Define the path of output files', required=True)
+
+args = vars(parser.parse_args())
+
+#collocate caliop with viirs
+maximum_distance = float(args['maximum_distance'])
+maximum_interval = float(args['maximum_timeinterval'])
+viirs_resolution = float(args['swath_resolution'])
+
+clayer1km_path = args['track_instrument_path'].strip()
+vnp03_path = args['swath_geo_path'].strip()
+vnp02_path = args['swath_data_path'].strip()
+save_path = args['save_path'].strip()
+
+#collocate caliop with viirs
+#maximum_distance = 5.0  #kilometer
+#maximum_interval = 15.0 #minute
+#viirs_resolution = 0.75 #kilometer
+
+#clayer1km_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/CALIPSO-L2-01km-CLayer/'
+#vnp03_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/VNP03MOD-VIIRS-Coordinates/'
+#vnp02_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/VNP02MOD-VIIRS-Attributes/'
+#save_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/collocation-output/'
 
 clayer1km_files = sorted(glob.glob(clayer1km_path+'*.hdf'))
 vnp03_files = sorted(glob.glob(vnp03_path+'*.nc'))
@@ -102,8 +126,8 @@ for clayer1km_file in clayer1km_files:
                              '/observation_data/M10', '/observation_data/M11', '/observation_data/M12',
                              '/observation_data/M13', '/observation_data/M14', '/observation_data/M15',
                              '/observation_data/M16']
-        viirs_data = ir.load_collocate_viirs_dataset(viirs_file=vnp02_file[0],viirs_along=collocation_indexing['swath_index_y'],
-                     viirs_cross=collocation_indexing['swath_index_x'],selected_datasets=viirs_02_datasets)
+        viirs_data = ir.load_collocate_viirs_dataset(viirs_file=vnp02_file[0],viirs_along=collocation_indexing['swath_index_x'],
+                     viirs_cross=collocation_indexing['swath_index_y'],selected_datasets=viirs_02_datasets)
         
         #finished
         #You are able to save collocated CALIPSO data (caliop_data) and VIIRS data (viirs_data) to any files.
