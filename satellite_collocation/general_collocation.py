@@ -280,49 +280,27 @@ def track_swath_collocation(track_lat='',track_lon='',track_time='',
 # input: track_lat, track_lon, track_time
 #        1-D lat/lon/time of a track of pixels (e.g., from CALIPSO/CATS/CloudSat)
 #        Datetime objects for all track pixels are needed (but can be identical) 
-# input: disk_lat, disk_lon, disk_time
+# input: disk_lat, disk_lon
 #        2-D lat/lon of a disk of pixels (e.g., from ABI/AHI)
-#        only a single disk_time is needed for all pixels
 # input: disk_resolution
 #        native spatial resolution in kilometer of the disk data (e.g., ABI=0.5/1/2)
-# input: maximum_distance, maximum_interval
-#        the maximum spatial distance (in kilometer) and maximum time interval (in minute) between a track pixel and a swath pixel
-#        e.g., 5km and 5 minutes, the code will find collocated pixel pairs with maximum spatial distance 5km and +/- 5minutes
+# input: maximum_distance
+#        the maximum spatial distance (in kilometer) between a track pixel and a swath pixel
+#        e.g., 5km, the code will find collocated pixel pairs with maximum spatial distance 5km
 # output: Dictionary
 #.        'disk_index_x': 1-D array of x indices for collocated swath pixels (valid range >=0, -1 means no collocation)
 #         'disk_index_y': 1-D array of y indices for collocated swath pixels (valid range >=0, -1 means no collocation),
-#         'track_index_x': 1-D array of x indices for collocated track pixels (valid range >=0, -1 means no collocation)
 #         'disk_track_distance': 1-D array of distances between collocated disk and track pixels (valid range >=0, -9999.99 means no collocation)
-#         'disk_track_time_difference': 1-D array of time interval between collocated disk and track pixels 
-#                                        (>0 means disk observations are made before track pixels, <0 otherwise, -9999.99 means no collocation)
 
 def track_disk_collocation(track_lat='',track_lon='',track_time='',
-                           disk_lat='',disk_lon='',disk_time='',disk_resolution='',
-                           maximum_distance='',maximum_interval=''):
-
-    #step 1: define search start/end datetimes
-    search_sdt = disk_time - datetime.timedelta(minutes=maximum_interval)
-    search_edt = disk_time + datetime.timedelta(minutes=maximum_interval)
+                           disk_lat='',disk_lon='',disk_resolution='',
+                           maximum_distance=''):
 
     n_profile = len(track_lat)
 
     disk_ind_x = np.full(n_profile,-1,dtype='i')
     disk_ind_y = np.full(n_profile,-1,dtype='i')
     disk_track_dist = np.full(n_profile,-9999.99)
-    disk_track_tdif = np.full(n_profile,-9999.99)
-    track_ind_x = np.full(n_profile,-1,dtype='i')
-
-    #step 2: find track profiles within the search range
-    profile_index = np.where( (track_time < search_edt) &
-                              (track_time > search_sdt) )[0]
-
-    if (len(profile_index) == 0):
-        return {'disk_index_x':disk_ind_x, 'disk_index_y':disk_ind_y,
-                'track_index_x':track_ind_x, 'disk_track_distance':disk_track_dist,
-                'disk_track_time_difference':disk_track_tdif}
-
-    lon_sub = track_lon[profile_index]
-    lat_sub = track_lat[profile_index]
 
     #collocation method 1:
     dist = np.zeros
@@ -337,19 +315,20 @@ def track_disk_collocation(track_lat='',track_lon='',track_time='',
 
     track_resolution = 1.0
     step_t = int ( ( (step_x + step_y)*disk_resolution ) / track_resolution / 2.0 )
-    step_t = min(max(step_t,1), len(lon_sub))
+    step_t = min(max(step_t,1), len(track_lon))
 
-    distances = sg.targets_distance(lat_sub[::step_t],lon_sub[::step_t],disk_lat[::step_x,::step_y],disk_lon[::step_x,::step_y])
+    #print (track_lat[::step_t])
+    #print (track_lat[::step_t].shape)
+    distances = sg.targets_distance(track_lat[::step_t],track_lon[::step_t],disk_lat[::step_x,::step_y],disk_lon[::step_x,::step_y])
 
     if (distances.min() >= dist_threshold):
         #print ('No collocation')
         return {'disk_index_x':disk_ind_x, 'disk_index_y':disk_ind_y,
-                'track_index_x':track_ind_x, 'disk_track_distance':disk_track_dist,
-                'disk_track_time_difference':disk_track_tdif}
+                'disk_track_distance':disk_track_dist}
 
     distances_full = np.repeat(distances,step_t,axis=2)
 
-    for i_profile in range(0,len(profile_index)):
+    for i_profile in range(len(track_lon)):
         this_dist = distances_full[:,:,i_profile]
         if (this_dist.min() >= dist_threshold):
             continue
@@ -361,7 +340,7 @@ def track_disk_collocation(track_lat='',track_lon='',track_time='',
         search_s2 = max(int(min_ind[1] * step_y - step_y/2 - step_t/2), 0)
         search_e2 = min(int(min_ind[1] * step_y + step_y/2 + step_t/2), disk_lat.shape[1])
 
-        refine_dist = sg.target_distance(lat_sub[i_profile],lon_sub[i_profile],
+        refine_dist = sg.target_distance(track_lat[i_profile],track_lon[i_profile],
                                          disk_lat[search_s1:search_e1,search_s2:search_e2],
                                          disk_lon[search_s1:search_e1,search_s2:search_e2])
 
@@ -369,33 +348,30 @@ def track_disk_collocation(track_lat='',track_lon='',track_time='',
             continue
 
         refine_ind = np.unravel_index(refine_dist.argmin(), refine_dist.shape)
-        disk_ind_x[profile_index[i_profile]] = refine_ind[0] + search_s1
-        disk_ind_y[profile_index[i_profile]] = refine_ind[1] + search_s2
+        disk_ind_x[i_profile] = refine_ind[0] + search_s1
+        disk_ind_y[i_profile] = refine_ind[1] + search_s2
 
-#        print (search_s1,search_e1,search_s2,search_e2,lat_sub[i_profile],lon_sub[i_profile],
-#               disk_ind_x[profile_index[i_profile]],disk_ind_y[profile_index[i_profile]],
-#               refine_dist.min())
+        #print (search_s1,search_e1,search_s2,search_e2,track_lat[i_profile],track_lon[i_profile],
+        #       disk_ind_x[i_profile],disk_ind_y[i_profile],
+        #       refine_dist.min())
 
-#        print ('refine_dist:')
-#        print (refine_dist[refine_ind[0]-2:refine_ind[0]+3,refine_ind[1]-2:refine_ind[1]+3])
-#        print ('ABI Lat:')
-#        print (disk_lat[disk_ind_x[profile_index[i_profile]]-2:disk_ind_x[profile_index[i_profile]]+3,
-#                        disk_ind_y[profile_index[i_profile]]-2:disk_ind_y[profile_index[i_profile]]+3])
-#        print ('ABI Lon:')
-#        print (disk_lon[disk_ind_x[profile_index[i_profile]]-2:disk_ind_x[profile_index[i_profile]]+3,
-#                        disk_ind_y[profile_index[i_profile]]-2:disk_ind_y[profile_index[i_profile]]+3])
+        #print ('refine_dist:')
+        #print (refine_dist[refine_ind[0]-2:refine_ind[0]+3,refine_ind[1]-2:refine_ind[1]+3])
+        #print ('ABI Lat:')
+        #print (disk_lat[disk_ind_x[i_profile]-2:disk_ind_x[i_profile]+3,
+        #                disk_ind_y[i_profile]-2:disk_ind_y[i_profile]+3])
+        #print ('ABI Lon:')
+        #print (disk_lon[disk_ind_x[i_profile]-2:disk_ind_x[i_profile]+3,
+        #                disk_ind_y[i_profile]-2:disk_ind_y[i_profile]+3])
 
-        disk_track_dist[profile_index[i_profile]] = refine_dist.min()
-        disk_track_tdif[profile_index[i_profile]] = (track_time[profile_index[i_profile]] - disk_time).total_seconds()/60.
-        track_ind_x[profile_index[i_profile]] = profile_index[i_profile]
-        
-    uncollocated_index = np.where(track_ind_x<0)
+        disk_track_dist[i_profile] = refine_dist.min()
+        #disk_track_tdif[i_profile] = (track_time[i_profile] - disk_time).total_seconds()/60.
+
+    uncollocated_index = np.where(disk_track_dist<0)
     if (len(uncollocated_index[0])>0):
         disk_ind_x[uncollocated_index] = -1
         disk_ind_y[uncollocated_index] = -1
         disk_track_dist[uncollocated_index] = -9999.99
-        disk_track_tdif[uncollocated_index] = -9999.99
 
     return {'disk_index_x':disk_ind_x, 'disk_index_y':disk_ind_y,
-            'track_index_x':track_ind_x, 'disk_track_distance':disk_track_dist,
-            'disk_track_time_difference':disk_track_tdif}
+            'disk_track_distance':disk_track_dist}
