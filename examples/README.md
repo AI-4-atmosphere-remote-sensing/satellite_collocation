@@ -22,31 +22,22 @@ Step 2: To run the example code, you need [VIIRS/NPP Moderate Resolution Terrain
 
 Step 3: Use [scripts](https://ladsweb.modaps.eosdis.nasa.gov/tools-and-services/data-download-scripts/#python) to download VIIRS Data
 
-#### 1.2 Modify the Example Code:
+#### 1.2 Run the Example Code:
 
-Step 1: Select appropriate the time and distance thresholds for collocation code:
+Check usage:
+python main.py --help
 
-maximum_distance = 5.0  #kilometer
+Required Command Line Arguments:
 
-maximum_interval = 15.0 #minute
+'-md',  '--maximum_distance': Define the maximum distance of collocated pixels in kilometer
+'-mt',  '--maximum_timeinterval', Define the maximum time interval of collocated pixels in minutes
+'-sr',  '--swath_resolution', Define the pixel resolution of swath instrument in kilometer
+'-tp',  '--track_instrument_path', Define the path of CALIPSO L2 files
+'-sgp', '--swath_geo_path', Define the path of VIIRS VNP03 files
+'-sdp', '--swath_data_path', Define the path of VIIRS VNP02 files
+'-sp',  '--save_path', Define the path of output files
 
-Step 2: Tell code the spatial resolution of VIIRS (or other passive instrument):
-
-viirs_resolution = 0.75 #kilometer
-
-Step 3: Specify locations of CALIPSO and VIIRS data and where you want to save the output files:
-
-clayer1km_path = '$CALIPSO_CLAYER_1KM_Path'
-
-vnp03_path = '$VIIRS_VNP03_MOD_Path'
-
-save_path = '$SAVE_Path'
-
-#### 1.3 Run the Example Code:
-
-Simply type "python main.py"
-
-#### 1.4 Output:
+#### 1.3 Output:
 
 The collocation file will be named with "CAL_" + $CALIPSO_Timeflag + "_VNP_" + $VIIRS_Timeflag + "_Index.h5" and saved in HDF5 format in the $SAVE_Path folder.
 
