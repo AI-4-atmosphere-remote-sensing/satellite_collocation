@@ -14,6 +14,22 @@ import h5py
 import warnings
 warnings.filterwarnings("ignore")
 
+import argparse
+import string
+
+parser = argparse.ArgumentParser(description='This code is an example of collocating CALIPSO and ABI onboard GOESR_16')
+parser.add_argument('-md','--maximum_distance', help='Define the maximum distance of collocated pixels in kilometer', required=True)
+parser.add_argument('-gr','--geo_resolution', help='Define the pixel resolution of ABI in kilometer', required=True)
+parser.add_argument('-tp','--track_instrument_path', help='Define the path of CALIPSO L2 files', required=True)
+parser.add_argument('-sp','--save_path', help='Define the path of output files', required=True)
+
+args = vars(parser.parse_args())
+
+maximum_distance = float(args['maximum_distance'])
+geo_resolution = float(args['geo_resolution'])
+cal_clayer_path = args['track_instrument_path'].strip()
+save_path = args['save_path'].strip()
+
 # change the next two lines
 goesr_16_path = '/tis/modaps/goesr/v10/GOES-16-ABI-L1B-FULLD/'
 cal_clayer_path = '/data/shared_data/CALIPSO/CAL_LID_L2_01kmCLay/'
