@@ -17,7 +17,7 @@ import h5py
 from datetimerange import DateTimeRange
 import argparse
 
-def collocate_viirs_calipso(clayer1km_file, vnp03_files, save_path):
+def collocate_viirs_calipso(clayer1km_file, maximum_distance, maximum_interval, viirs_resolution, vnp03_files, save_path):
 
     print ('clayer1km_file:', clayer1km_file)
     print ('vnp03_files:', vnp03_files)
@@ -34,7 +34,7 @@ def collocate_viirs_calipso(clayer1km_file, vnp03_files, save_path):
     overlap_flags = gc.find_overlap( caliop_timerange, vnp_timeranges )
     indices = np.where(overlap_flags==1)[0]
 
-    save_paths = numpy.array(dtype=object)
+    save_paths = np.array([], dtype=object)
 
     for index in indices:
 
@@ -82,7 +82,7 @@ def collocate_viirs_calipso(clayer1km_file, vnp03_files, save_path):
         sav_id.create_dataset('CALIPSO_VIIRS_Interval',data=collocation_indexing['swath_track_time_difference'])
         sav_id.close()
         print( 'one index file is saved as ', save_path+sav_name)
-        save_paths.append(save_path+sav_name)
+        save_paths = np.append(save_paths, save_path+sav_name)
 
     return save_paths;
 
@@ -90,9 +90,9 @@ def collocate_viirs_calipso(clayer1km_file, vnp03_files, save_path):
 if __name__ =='__main__':
 
     parser = argparse.ArgumentParser(description='This code is an example of collocating CALIPSO and VIIRS')
-    parser.add_argument('-md','--maximum_distance', help='Define the maximum distance of collocated pixels in kilometer', default=5.0, required=True)
-    parser.add_argument('-mt','--maximum_timeinterval', help='Define the maximum time interval of collocated pixels in minutes', default=15.0,  required=True)
-    parser.add_argument('-sr','--swath_resolution', help='Define the pixel resolution of swath instrument in kilometer', default=.75, required=True)
+    parser.add_argument('-md','--maximum_distance', help='Define the maximum distance of collocated pixels in kilometer', default=5.0)
+    parser.add_argument('-mt','--maximum_timeinterval', help='Define the maximum time interval of collocated pixels in minutes', default=15.0)
+    parser.add_argument('-sr','--swath_resolution', help='Define the pixel resolution of swath instrument in kilometer', default=0.75)
     parser.add_argument('-tp','--track_instrument_path', help='Define the path of CALIPSO L2 files', required=True)
     parser.add_argument('-sgp','--swath_geo_path', help='Define the path of VIIRS VNP03 files', required=True)
     parser.add_argument('-sdp','--swath_data_path', help='Define the path of VIIRS VNP02 files', required=True)
@@ -112,7 +112,8 @@ if __name__ =='__main__':
 
     clayer1km_files = sorted(glob.glob(clayer1km_path+'*.hdf'))
     vnp03_files = sorted(glob.glob(vnp03_path+'*.nc'))
-    kwargv = { "vnp03_files": vnp03_files, "save_path": save_path}
+    kwargv = { "maximum_distance": maximum_distance, "maximum_interval": maximum_interval, "viirs_resolution": viirs_resolution, "vnp03_files": vnp03_files, "save_path": save_path}
+
 
     #create a client at the same node
     client = Client()
