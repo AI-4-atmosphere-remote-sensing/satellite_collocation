@@ -74,15 +74,16 @@ def collocate_viirs_calipso(clayer1km_file, maximum_distance, maximum_interval, 
 
         #save co-location indices to files
         sav_name = 'CAL_' + cal_timeflag + '_VNP_' + vnp_timeflag + '_Index.h5'
-        sav_id = h5py.File(save_path+sav_name,'w')
+        sav_file = save_path+'/'+sav_name
+        sav_id = h5py.File(sav_file,'w')
         sav_id.create_dataset('CALIPSO_Track_Index',data=collocation_indexing['track_index_x'])
         sav_id.create_dataset('VIIRS_CrossTrack_Index',data=collocation_indexing['swath_index_y'])
         sav_id.create_dataset('VIIRS_AlongTrack_Index',data=collocation_indexing['swath_index_x'])
         sav_id.create_dataset('CALIPSO_VIIRS_Distance',data=collocation_indexing['swath_track_distance'])
         sav_id.create_dataset('CALIPSO_VIIRS_Interval',data=collocation_indexing['swath_track_time_difference'])
         sav_id.close()
-        print( 'one index file is saved as ', save_path+sav_name)
-        save_paths = np.append(save_paths, save_path+sav_name)
+        print( 'one index file is saved as ', sav_file)
+        save_paths = np.append(save_paths, sav_file)
 
     return save_paths;
 
@@ -109,6 +110,8 @@ if __name__ =='__main__':
     vnp03_path = args['swath_geo_path'].strip()
     vnp02_path = args['swath_data_path'].strip()
     save_path = args['save_path'].strip()
+    if not os.path.exists(save_path):
+       os.makedirs(save_path)
 
     clayer1km_files = sorted(glob.glob(clayer1km_path+'*.hdf'))
     vnp03_files = sorted(glob.glob(vnp03_path+'*.nc'))
