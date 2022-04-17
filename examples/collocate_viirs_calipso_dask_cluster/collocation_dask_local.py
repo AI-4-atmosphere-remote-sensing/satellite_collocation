@@ -15,8 +15,9 @@ import glob
 import os
 import h5py
 from datetimerange import DateTimeRange
+import argparse
 
-def collocate_viirs_calipso(clayer1km_file, vnp03_files):
+def collocate_viirs_calipso(clayer1km_file, vnp03_files, save_path):
 
     print ('clayer1km_file:', clayer1km_file)
     print ('vnp03_files:', vnp03_files)
@@ -32,6 +33,8 @@ def collocate_viirs_calipso(clayer1km_file, vnp03_files):
     caliop_timerange = DateTimeRange(caliop_dts[0],caliop_dts[-1])
     overlap_flags = gc.find_overlap( caliop_timerange, vnp_timeranges )
     indices = np.where(overlap_flags==1)[0]
+
+    save_paths = numpy.array(dtype=object)
 
     for index in indices:
 
@@ -68,23 +71,48 @@ def collocate_viirs_calipso(clayer1km_file, vnp03_files):
             n_col =  len(np.where(caliop_ind>=0)[0])
             print("Collocated pixels: %5d" % n_col)
             print ( '' )
-        return caliop_ind;
+
+        #save co-location indices to files
+        sav_name = 'CAL_' + cal_timeflag + '_VNP_' + vnp_timeflag + '_Index.h5'
+        sav_id = h5py.File(save_path+sav_name,'w')
+        sav_id.create_dataset('CALIPSO_Track_Index',data=collocation_indexing['track_index_x'])
+        sav_id.create_dataset('VIIRS_CrossTrack_Index',data=collocation_indexing['swath_index_y'])
+        sav_id.create_dataset('VIIRS_AlongTrack_Index',data=collocation_indexing['swath_index_x'])
+        sav_id.create_dataset('CALIPSO_VIIRS_Distance',data=collocation_indexing['swath_track_distance'])
+        sav_id.create_dataset('CALIPSO_VIIRS_Interval',data=collocation_indexing['swath_track_time_difference'])
+        sav_id.close()
+        print( 'one index file is saved as ', save_path+sav_name)
+        save_paths.append(save_path+sav_name)
+
+    return save_paths;
 
 
 if __name__ =='__main__':
 
-    #collocate caliop with viirs
-    maximum_distance = 5.0  #kilometer
-    maximum_interval = 15.0 #minute
-    viirs_resolution = 0.75 #kilometer
+    parser = argparse.ArgumentParser(description='This code is an example of collocating CALIPSO and VIIRS')
+    parser.add_argument('-md','--maximum_distance', help='Define the maximum distance of collocated pixels in kilometer', default=5.0, required=True)
+    parser.add_argument('-mt','--maximum_timeinterval', help='Define the maximum time interval of collocated pixels in minutes', default=15.0,  required=True)
+    parser.add_argument('-sr','--swath_resolution', help='Define the pixel resolution of swath instrument in kilometer', default=.75, required=True)
+    parser.add_argument('-tp','--track_instrument_path', help='Define the path of CALIPSO L2 files', required=True)
+    parser.add_argument('-sgp','--swath_geo_path', help='Define the path of VIIRS VNP03 files', required=True)
+    parser.add_argument('-sdp','--swath_data_path', help='Define the path of VIIRS VNP02 files', required=True)
+    parser.add_argument('-sp','--save_path', help='Define the path of output files', required=True)
 
-    clayer1km_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/CALIPSO-L2-01km-CLayer/'
-    vnp03_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/VNP03MOD-VIIRS-Coordinates/'
-    save_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/collocation-output/'
+    args = vars(parser.parse_args())
+
+    #collocate caliop with viirs
+    maximum_distance = float(args['maximum_distance'])
+    maximum_interval = float(args['maximum_timeinterval'])
+    viirs_resolution = float(args['swath_resolution'])
+
+    clayer1km_path = args['track_instrument_path'].strip()
+    vnp03_path = args['swath_geo_path'].strip()
+    vnp02_path = args['swath_data_path'].strip()
+    save_path = args['save_path'].strip()
 
     clayer1km_files = sorted(glob.glob(clayer1km_path+'*.hdf'))
     vnp03_files = sorted(glob.glob(vnp03_path+'*.nc'))
-    kwargv = { "vnp03_files": vnp03_files}
+    kwargv = { "vnp03_files": vnp03_files, "save_path": save_path}
 
     #create a client at the same node
     client = Client()
