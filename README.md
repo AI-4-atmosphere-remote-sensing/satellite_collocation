@@ -6,6 +6,7 @@ This repository provides a toolkit that collocates data from two or more satelli
 #### Conda environment setup
 ```
 conda create -n satellite_collocation -c conda-forge python=3.7 libnetcdf netCDF4 h5py
+conda activate satellite_collocation
 
 >> git clone https://github.com/AI-4-atmosphere-remote-sensing/satellite_collocation.git
 >> cd satellite_collocation
