@@ -7,8 +7,7 @@ which refers to the reading, updating, creating and deleting of operations conce
 
 ## Getting into API Gateway
 
-Please follow the step-by-step instruction to configure SageMaker
-
+Please follow the step-by-step instruction to Find your API. ***Your corresponding EC2 instance must be running***.
 ### Step1 ***-Sigining in!-***
 
 First, go to **www.aws.amazon.com** then click **sign in** to the console (on top right corner). Use your credentials (username, password, etc.) to login to the aws console.
