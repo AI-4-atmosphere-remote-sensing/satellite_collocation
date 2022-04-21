@@ -16,8 +16,6 @@ First, go to **www.aws.amazon.com** then click **sign in** to the console (on to
 
 Once you are logged in, you should select the right **Region** (on top right corner) to make sure you are using all other related services or your team are in the same region. If this is a new account, default region is okay but next services onwards should be in the same region.
 
-![text-here](./images/4.png)
-
 ### Step3 ***-Get to the API console-***
 
 Click the **Services** _(with 9 dots)_ and choose **Networking & Content Delivery** from the dropdown, then on the right panel you will see **API Gatway**. Alternatively, type **API Gateway** in the search box _(second image)_, click on the **API Gateway**.
