@@ -72,7 +72,7 @@ Let's click the **Configuration** from Menu and select **Permissions** on the le
 
 ![text-here](./APIGateway_Images_dev/14.png)
 
-You will see if there are any policies attached to this role or you will see at least one role with **BasicExecutionRole**.
+You will see if there are any policies attached to this role or you will see at least one role with **BasicExecutionRole**. Please note, the list of policies you can see in the following image are required for this task. So please add your policies as required by following the next step.
 
 ![text-here](./APIGateway_Images_dev/15.png)
 
