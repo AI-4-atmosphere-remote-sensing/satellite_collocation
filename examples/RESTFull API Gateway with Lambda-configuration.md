@@ -97,24 +97,23 @@ Click the **Services** _(with 9 dots)_ and choose **Networking & Content Deliver
 
 ![text-here](./APIGateway_Images_dev/20.png)
 
-In this API Gateway page, click the **Create API** button. 
+In this page, click the **Create API** button. 
 
 ![text-here](./APIGateway_Images_dev/21.png)
 
-At this page click **Build** from the **REST API** section.
+At this point click **Build** from the **REST API** section.
 
 ![text-here](./APIGateway_Images_dev/22.png)
 
-
-Now in this page, select **REST** from protocol, in the settings, enter an **API name**, description is optional, Endpoint Type is **Regional** as we are building regional services in our case. Finally click **Create API** on the bottom right (_blue button_).
+Now in this page, select **REST** from protocol, choose **New API** and then in the settings, enter an **API name**, description is optional, Endpoint Type is **Regional** as we are building regional services in our case. Finally click **Create API** on the bottom right (_blue button_).
 
 ![text-here](./APIGateway_Images_dev/23.png)
 
-Now the API is create! Under **Resources** there will be a ***/*** where we need to add our Resources. From **Actions** select **Create Resource**.
+Now the API is created! Under **Resources** there will be a ***"/"*** where we need to add our Resources. From **Actions** select **Create Resource**.
 
 ![text-here](./APIGateway_Images_dev/24.png)
 
-Now, Under the Resources the ***/test*** will appear. Select ***/test***, click **Actions** and click **Create Method**.
+Now, Under the Resources the ***/test*** will appear. Select ***"/"test***, click **Actions** and click **Create Method**.
 
 ![text-here](./APIGateway_Images_dev/25.png)
 
