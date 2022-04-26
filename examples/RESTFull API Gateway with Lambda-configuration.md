@@ -88,4 +88,27 @@ Here you can type full policy name or a part of it (correcly) and hit return in 
 
 ![text-here](./APIGateway_Images_dev/18.png)
 
+## ***Step1 AWS API Gateway***
+### --Create API--
+
 ![text-here](./APIGateway_Images_dev/19.png)
+
+![text-here](./APIGateway_Images_dev/20.png)
+
+
+![text-here](./APIGateway_Images_dev/21.png)
+![text-here](./APIGateway_Images_dev/22.png)
+![text-here](./APIGateway_Images_dev/23.png)
+![text-here](./APIGateway_Images_dev/24.png)
+![text-here](./APIGateway_Images_dev/25.png)
+![text-here](./APIGateway_Images_dev/26.png)
+![text-here](./APIGateway_Images_dev/27.png)
+![text-here](./APIGateway_Images_dev/28.png)
+![text-here](./APIGateway_Images_dev/29.png)
+![text-here](./APIGateway_Images_dev/30.png)
+![text-here](./APIGateway_Images_dev/31.png)
+![text-here](./APIGateway_Images_dev/32.png)
+![text-here](./APIGateway_Images_dev/33.png)
+![text-here](./APIGateway_Images_dev/34.png)
+
+
