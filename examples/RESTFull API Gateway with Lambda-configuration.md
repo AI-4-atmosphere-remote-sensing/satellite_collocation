@@ -72,7 +72,7 @@ Let's click the **Configuration** from Menu and select **Permissions** on the le
 
 ![text-here](./APIGateway_Images_dev/14.png)
 
-You will see if there are any policies attached to this role or you will see at least one role with **BasicExecutionRole**. Please note, the list of policies you can see in the following image are required for this task. To attach a policy to to your role, click **Add Permissions** dropdown and select **Attach Policies**
+You will see if there are any policies attached to this role or you will see at least one role with **BasicExecutionRole**. Please note, the list of policies you can see in the following image are required for this task. To attach a policy to to your role, click **Add Permissions** dropdown and select **Attach Policies**.
 
 ![text-here](./APIGateway_Images_dev/15.png)
 
@@ -97,19 +97,20 @@ Click the **Services** _(with 9 dots)_ and choose **Networking & Content Deliver
 
 ![text-here](./APIGateway_Images_dev/20.png)
 
-At this page click **Build** from the **REST API** section
+In this API Gateway page, click the **Create API** button. 
 
 ![text-here](./APIGateway_Images_dev/21.png)
 
-Now in this page, select **REST** from protocol, in the settings, enter an **API name**, description is optional, Endpoint Type is **Regional** as we are building regional services in our case. Finally click **Create API** on the bottom right (_blue button_).
+At this page click **Build** from the **REST API** section.
 
 ![text-here](./APIGateway_Images_dev/22.png)
 
-Now the API is create! Under **Resources** there will be a ***/*** where we need to add our Resources. From **Actions** select **Create Resource**.
+
+Now in this page, select **REST** from protocol, in the settings, enter an **API name**, description is optional, Endpoint Type is **Regional** as we are building regional services in our case. Finally click **Create API** on the bottom right (_blue button_).
 
 ![text-here](./APIGateway_Images_dev/23.png)
 
-It will ask for a Resource Name, where you can put any name _(test, in our case)_, then click **Create Resource** button.
+Now the API is create! Under **Resources** there will be a ***/*** where we need to add our Resources. From **Actions** select **Create Resource**.
 
 ![text-here](./APIGateway_Images_dev/24.png)
 
@@ -117,33 +118,39 @@ Now, Under the Resources the ***/test*** will appear. Select ***/test***, click 
 
 ![text-here](./APIGateway_Images_dev/25.png)
 
-Then you can select any method you need. In our case we chose **GET**. After that click the associated small **tick mark**.
+It will ask for a Resource Name, where you can put any name _(test, in our case)_, then click **Create Resource** button.
 
 ![text-here](./APIGateway_Images_dev/26.png)
 
-At this point, we need to attach the Lambda function that we created earlier. To do so, choose, lambda Function from Integration type, select your right Region, then in the Lambda Function text box, start typing your Lambda funtion name, it will show you related functions, just choose the one you need for this task. Finally hit **Save** button.
+Then you can select any method you need. In our case we chose **GET**. After that click the associated small **tick mark**.
 
 ![text-here](./APIGateway_Images_dev/27.png)
 
-Once you clicked Save, it will pop-up the follwoing window askign about permission. Press **OK**.
-
+At this point, we need to attach the Lambda function that we created earlier. To do so, choose, lambda Function from Integration type, select your right Region, then in the Lambda Function text box, start typing your Lambda funtion name, it will show you related functions, just choose the one you need for this task. Finally hit **Save** button.
 ![text-here](./APIGateway_Images_dev/28.png)
 
-Now the Lambda is connected to this API. The methods and asscociated Lambda is displayed here on the right panel. Now, we need to deploy the API. To do so, click **Actions** and then **Deploy API**.
+Once you clicked Save, it will pop-up the follwoing window askign about permission. Press **OK**.
 
 ![text-here](./APIGateway_Images_dev/29.png)
 
-The new pop-up will ask for Deployment Stage, just select the **[New Stage]** and as a stage name you can choose anything (like _v1_). Hit **Deploy**.
+Now the Lambda is connected to this API. The methods and asscociated Lambda is displayed here on the right panel. Now, we need to deploy the API. To do so, click **Actions** and then **Deploy API**.
 
 ![text-here](./APIGateway_Images_dev/30.png)
 
-At this point you will be able to see a link but we will not use this one but the other one!
+The new pop-up will ask for Deployment Stage, just select the **[New Stage]** and as a stage name you can choose anything (like _v1_). Hit **Deploy**.
 
 ![text-here](./APIGateway_Images_dev/31.png)
 
-On the Stage, click the **v1** dropdown and select **GET**, the API link will appear on the right pannel. This is our final API. You can just click it and it will do the job! For later use, you can save this link somewhere.
+At this point you will be able to see a link but we will not use this one but the other one!
+
 ![text-here](./APIGateway_Images_dev/32.png)
+
+On the Stage, click the **v1** dropdown and select **GET**, the API link will appear on the right pannel. This is our final API. You can just click it and it will do the job! For later use, you can save this link somewhere.
+
 ![text-here](./APIGateway_Images_dev/33.png)
+
+You can also go to your Lambda function and you will see now the API Gateway is details is here now. It means the API gateway can use this lambda function as a trigger.
+
 ![text-here](./APIGateway_Images_dev/34.png)
 
-
+***YOU are All SET***
