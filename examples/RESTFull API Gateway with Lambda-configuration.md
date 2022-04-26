@@ -40,12 +40,12 @@ In **Role details**, enter a **Role name** and click **Create role** (blue butto
 
 ***We are done creating the **Role** which was the first step. Now we will move on to the next step which is configuring a lambda function!***
 
+![text-here](./APIGateway_Images_dev/7.png)
+
 ## ***Step2 LAMBDA Function***
 ###  --Create a Lambda function--
 
 Choose Lambda from either servies (_services > Compute > Lambda_) or search for Lambda to go to the Lambda function page.
-
-![text-here](./APIGateway_Images_dev/7.png)
 
 Select the **Create Function** (orange button on the top right).
 
