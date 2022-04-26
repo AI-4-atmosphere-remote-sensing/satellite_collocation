@@ -13,16 +13,16 @@ which refers to the reading, updating, creating and deleting of operations conce
 Go to **www.aws.amazon.com** to **sign in** to the console (on top right corner) using your credentials (username, password, etc.).
 Once you are logged in, select the right **Region** (on top right corner) in which you want your deploy your desired services. If this is a new account, default region would work.
 
-## ***IAM (Identity Access Management)***
-### Step1.1 --IAM Dashboard--
+## ***Step1 IAM (Identity Access Management)***
+### --IAM Dashboard--
 Go to the **Services** (with 9 dots), click **Security, Identity & Compliance** and choose **IAM** on the right panel. Or, alternatively search for IAM and choose IAM from the services.
 
 ![text-here](./APIGateway_Images_dev/1.png)
 
 ![text-here](./APIGateway_Images_dev/2.png)
 
-### Step1.1 --Create Role--
-Now you are in the IAM dashboard where you can create a new role if you do not have one. Policies are attached to the Role to perform some specific tasks which we will allow you to have permissions to communicate between services. In this page click **Roles** ont the left panel and then **Create role** (blue button on the top right).
+### --Create Role--
+Now you are in the IAM dashboard where you can create a new role if you do not have one. Policies are attached to the Role to perform some specific tasks which we will allow you to have permissions to communicate between services. In this page click **Roles** on the left panel or in the middle and click **Create role** (blue button on the top right).
 
 ![text-here](./APIGateway_Images_dev/3.png)
 
@@ -40,12 +40,29 @@ In **Role details**, enter a **Role name** and click **Create role** (blue butto
 
 ***We are done creating the **Role** which was the first step. Now we will move on to the next step which is configuring a lambda function!***
 
+## ***Step2 LAMBDA Function***
+###  --Create a Lambda function--
+
+Choose Lambda from either servies (_services > Compute > Lambda_) or search for Lambda to go to the Lambda function page.
+
 ![text-here](./APIGateway_Images_dev/7.png)
 
+Select the **Create Function** (orange button on the top right).
 
 ![text-here](./APIGateway_Images_dev/8.png)
+
+In this page you can simply follow the image. First select **Author from scratch** as we are creating a new function, give a _unique_ function name, choose the run time (in this case we chose, Python 3.6), then go to the **Change default execution role** dropdown and select **Use an existing role**. In the **Existing role** dropdown select the **Role** you created in step 1. Finally click the **Create Function** (orange button on the bottom right).
+
+***note:*** If you wanto use any previously created **role** you can simply skip Step1 and start from step2.
+
 ![text-here](./APIGateway_Images_dev/9.png)
+
+Now you are redirected to the Lambda console where you can deploy your code in the **Code Source** box. A sample code is given that prints __Hello From Lambda!__.
+
 ![text-here](./APIGateway_Images_dev/10.png)
+
+***optionally*** you can test this existing code by selecting **Test** from the menu and click orange **Test** button. If it succeeds it will show as ***Execution Result: Succeeded** otherwise throw error!
+
 ![text-here](./APIGateway_Images_dev/11.png)
 ![text-here](./APIGateway_Images_dev/12.png)
 ![text-here](./APIGateway_Images_dev/13.png)
