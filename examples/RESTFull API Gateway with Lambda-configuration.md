@@ -1,5 +1,5 @@
 
-# How to Enable RESTFul API links using AWS Lambda and API Gateway Services
+# How to Configure RESTFul links using AWS Lambda and API Gateway Services to launch EC2 application
 
 Amazon API Gateway is an AWS service for creating, publishing, maintaining, monitoring, and securing REST, HTTP, and WebSocket APIs at any scale. 
 In this tutorial we considered REST APIs. A REST (representational state transfer), also called RESTful API is an architectural style for an 
