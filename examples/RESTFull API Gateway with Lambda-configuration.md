@@ -117,11 +117,11 @@ It will ask for a Resource Name, where you can put any name _(test, in our case)
 
 ![text-here](./APIGateway_Images_dev/25.png)
 
-Now, Under the Resources the ***/test*** will appear. Select ***"/"test***, click **Actions** and click **Create Method** and chose **GET**.
+Now, Under the Resources the ***/test*** will appear. Select ***"/"test***, click **Actions** and click **Create Method**.
 
 ![text-here](./APIGateway_Images_dev/26.png)
 
- After that click the associated small **tick mark**.
+ It will display list of Methods from where you can chose **GET** and click the associated small **tick mark**.
 
 ![text-here](./APIGateway_Images_dev/27.png)
 
