@@ -113,13 +113,15 @@ Now the API is created! Under **Resources** there will be a ***"/"*** where we n
 
 ![text-here](./APIGateway_Images_dev/24.png)
 
+It will ask for a Resource Name, where you can put any name _(test, in our case)_, then click **Create Resource** button.
+
 ![text-here](./APIGateway_Images_dev/25.png)
 
-It will ask for a Resource Name, where you can put any name _(test, in our case)_, then click **Create Resource** button.
+Now, Under the Resources the ***/test*** will appear. Select ***"/"test***, click **Actions** and click **Create Method** and chose **GET**.
 
 ![text-here](./APIGateway_Images_dev/26.png)
 
-Now, Under the Resources the ***/test*** will appear. Select ***"/"test***, click **Actions** and click **Create Method** and chose **GET**. After that click the associated small **tick mark**.
+ After that click the associated small **tick mark**.
 
 ![text-here](./APIGateway_Images_dev/27.png)
 
