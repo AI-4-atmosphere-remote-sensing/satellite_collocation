@@ -72,19 +72,19 @@ Let's click the **Configuration** from Menu and select **Permissions** on the le
 
 ![text-here](./APIGateway_Images_dev/14.png)
 
-You will see if there are any policies attached to this role or you will see at least one role with **BasicExecutionRole**. Please note, the list of policies you can see in the following image are required for this task. So please add your policies as required by following the next step.
+You will see if there are any policies attached to this role or you will see at least one role with **BasicExecutionRole**. Please note, the list of policies you can see in the following image are required for this task. To attach a policy to to your role, click **Add Permissions** dropdown and select **Attach Policies**
 
 ![text-here](./APIGateway_Images_dev/15.png)
 
-To attach a policy to to your role, click **Add Permissions** dropdown and select **Attach Policies**
+Here you can type full policy name or a part of it (correcly) and hit return in your keyboard to display the policy. Select the policy (check box) and click **Attach Policies**. By the end of this, you are done with Lambda function creation and attachment of policies.
 
 ![text-here](./APIGateway_Images_dev/16.png)
 
-Here you can type full policy name or a part of it (correcly) and hit return in your keyboard to display the policy. Select the policy (check box) and click **Attach Policies**.
+***Optionally*** if you want to see the logs of your execution in cloudwatch you can click **Monitor** from the Menu and click **View logs in CloudWatch**.
 
 ![text-here](./APIGateway_Images_dev/17.png)
 
-This is how you can add all the policies you need. You can find on aws what types of policies you need for your services. Here are some list of polocies we used to communicate between the required services.
+ It will take you to a new window with all logs by date and time (no screenshots provided)
 
 ![text-here](./APIGateway_Images_dev/18.png)
 
