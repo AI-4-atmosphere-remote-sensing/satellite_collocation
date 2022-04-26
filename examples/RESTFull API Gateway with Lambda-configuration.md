@@ -32,7 +32,7 @@ Select the entity type _(in this case it is **AWS Services**)_, next in the **Us
 
 ![text-here](./APIGateway_Images_dev/5.png)
 
-In this page you do not need any modifications except clicking **Next** (blue button on the bottom right). 
+In this page we cannot add any policies to the IAM role just created. But we can attach all necessary policies while configuring the lambda function. So, you can just the **Next** (blue button on the bottom right) button. 
 
 ![text-here](./APIGateway_Images_dev/6.png)
 
@@ -64,12 +64,28 @@ Now you are redirected to the Lambda console where you can deploy your code in t
 
 ![text-here](./APIGateway_Images_dev/12.png)
 
-***optionally*** you can test this existing code by selecting **Test** from the menu and click orange **Test** button. If it succeeds it will show as ***Execution Result: Succeeded** otherwise throw error!
+***optionally*** you can test this existing code by selecting **Test** from the menu and click orange **Test** button. If it succeeds it will show as ***Execution Result: Succeeded** otherwise throws error!
 
 ![text-here](./APIGateway_Images_dev/13.png)
 
+Let's click the **Configuration** from Menu and select **Permissions** on the left panel where you will find the Role name. You can click the Role (whatever your role is) to go to IAM page associated with this Role.
 
 ![text-here](./APIGateway_Images_dev/14.png)
+
+You will see if there are any policies attached to this role or you will see at least one role with **BasicExecutionRole**.
+
 ![text-here](./APIGateway_Images_dev/15.png)
+
+To attach a policy to to your role, click **Add Permissions** dropdown and select **Attach Policies**
+
 ![text-here](./APIGateway_Images_dev/16.png)
+
+Here you can type full policy name or a part of it (correcly) and hit return in your keyboard to display the policy. Select the policy (check box) and click **Attach Policies**.
+
 ![text-here](./APIGateway_Images_dev/17.png)
+
+This is how you can add all the policies you need. You can find on aws what types of policies you need for your services. Here are some list of polocies we used to communicate between the required services.
+
+![text-here](./APIGateway_Images_dev/18.png)
+
+![text-here](./APIGateway_Images_dev/19.png)
