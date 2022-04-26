@@ -84,7 +84,7 @@ Here you can type full policy name or a part of it (correcly) and hit return in 
 
 ![text-here](./APIGateway_Images_dev/17.png)
 
- It will take you to a new window with all logs by date and time (no screenshots provided)
+ It will take you to a new window with all logs by date and time.
 
 ![text-here](./APIGateway_Images_dev/18.png)
 
