@@ -47,25 +47,28 @@ In **Role details**, enter a **Role name** and click **Create role** (blue butto
 
 Choose Lambda from either servies (_services > Compute > Lambda_) or search for Lambda to go to the Lambda function page.
 
+![text-here](./APIGateway_Images_dev/8.png)
+
+![text-here](./APIGateway_Images_dev/9.png)
+
 Select the **Create Function** (orange button on the top right).
 
-![text-here](./APIGateway_Images_dev/8.png)
+![text-here](./APIGateway_Images_dev/10.png)
 
 In this page you can simply follow the image. First select **Author from scratch** as we are creating a new function, give a _unique_ function name, choose the run time (in this case we chose, Python 3.6), then go to the **Change default execution role** dropdown and select **Use an existing role**. In the **Existing role** dropdown select the **Role** you created in step 1. Finally click the **Create Function** (orange button on the bottom right).
 
 ***note:*** If you wanto use any previously created **role** you can simply skip Step1 and start from step2.
-
-![text-here](./APIGateway_Images_dev/9.png)
+![text-here](./APIGateway_Images_dev/11.png)
 
 Now you are redirected to the Lambda console where you can deploy your code in the **Code Source** box. A sample code is given that prints __Hello From Lambda!__.
 
-![text-here](./APIGateway_Images_dev/10.png)
+![text-here](./APIGateway_Images_dev/12.png)
 
 ***optionally*** you can test this existing code by selecting **Test** from the menu and click orange **Test** button. If it succeeds it will show as ***Execution Result: Succeeded** otherwise throw error!
 
-![text-here](./APIGateway_Images_dev/11.png)
-![text-here](./APIGateway_Images_dev/12.png)
 ![text-here](./APIGateway_Images_dev/13.png)
+
+
 ![text-here](./APIGateway_Images_dev/14.png)
 ![text-here](./APIGateway_Images_dev/15.png)
 ![text-here](./APIGateway_Images_dev/16.png)
