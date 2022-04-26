@@ -14,3 +14,5 @@ Go to **www.aws.amazon.com** then click **sign in** to the console (on top right
 Once you are logged in, select the right **Region** (on top right corner) in which you want your service to be deployed to make sure you/your team are using any other related services in the same region. If this is a new account, default region would also work.
 
 ## Step1.1 ***--configuring IAM (Identity Access Management) on AWS--***
+
+![text-here](./APIGateway_Images_dev/1.png)
