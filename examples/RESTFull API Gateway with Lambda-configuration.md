@@ -17,7 +17,7 @@ Amazon EC2 (Elastic Compute Cloud) is a web-based service that allows businesses
 
 ### ***To accomplish this process we need to go through configuring three (3) aws services including IAM, Lambda and API Gateway in various steps. This tutorial provides step by step configuration guidline.***
 
-## ***Login and choosing the region***
+## ***Login and selecting the region***
 
 Go to **www.aws.amazon.com** to **sign in** to the console (on top right corner) using your credentials (username, password, etc.).
 Once you are logged in, select the right **Region** (on top right corner) in which you want your deploy your desired services. If this is a new account, default region would work.
