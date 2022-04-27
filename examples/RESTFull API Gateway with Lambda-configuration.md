@@ -161,4 +161,4 @@ You can also go to your Lambda function and you will see now the API Gateway is 
 
 ![text-here](./APIGateway_Images_dev/34.png)
 
-***YOU are All SET***
+***We are all set!***
