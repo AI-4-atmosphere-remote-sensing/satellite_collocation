@@ -1,10 +1,19 @@
 
 # How to Configure RESTFul links using AWS Lambda and API Gateway Services to launch EC2 application
 
+## _What is AWS Lambda Functionon:_
+AWS Lambda is a serverless compute service that can run any sort of code without having to provision or manage servers. Lambda runs your code on highly available compute infrastructure and performs all of the administration of computing resources, capacity provisioning, automated scaling, monitoring, and logging.
+
+## _What is AWS API Gateway:_
 Amazon API Gateway is an AWS service for creating, publishing, maintaining, monitoring, and securing REST, HTTP, and WebSocket APIs at any scale. 
 In this tutorial we considered REST APIs. A REST (representational state transfer), also called RESTful API is an architectural style for an 
 application program interface (API) that uses HTTP requests to access and use data. That data can be used to GET, PUT, POST and DELETE data types,
 which refers to the reading, updating, creating and deleting of operations concerning resources.
+
+## _What is AWS EC2:_
+Amazon EC2 (Elastic Compute Cloud) is a web-based service that allows businesses to run application programs in the AWS public cloud. EC2 enables developer to configure virtual machines (VMs) to provide compute capacity and workloads are distributed through global AWS data centers. EC2 is capable of increasing or decreasing instance capacity as needed.
+
+## _This tutorial is about deployment of aws services that incorporates aws EC2 instance, Lambda function and API Gateway. We have pre-deployed deep learning application in EC2 which is triggered by a Lambda Function. API Gateway provides the link to call the Lambda function that triggers the event to EC2._
 
 ### ***To accomplish this process we need to go through configuring three (3) aws services including IAM, Lambda and API Gateway in various steps. This tutorial provides step by step configuration guidline.***
 
