@@ -126,8 +126,29 @@ for clayer1km_file in clayer1km_files:
                              '/observation_data/M10', '/observation_data/M11', '/observation_data/M12',
                              '/observation_data/M13', '/observation_data/M14', '/observation_data/M15',
                              '/observation_data/M16']
-        viirs_data = ir.load_collocate_viirs_dataset(viirs_file=vnp02_file[0],viirs_along=collocation_indexing['swath_index_x'],
-                     viirs_cross=collocation_indexing['swath_index_y'],selected_datasets=viirs_02_datasets)
+        
+        #get observations of collocated VIIRS pixels
+        viirs_along = collocation_indexing['swath_index_x']
+        viirs_cross = collocation_indexing['swath_index_y']
+        viirs_data = ir.load_collocate_viirs_dataset(viirs_file=vnp02_file[0],viirs_along=viirs_along,
+                     viirs_cross=viirs_cross,selected_datasets=viirs_02_datasets)
+
+        #get VIIRS observations 5 pixels away (left) from CALIPSO track
+        viirs_along_5l = collocation_indexing['swath_index_x']     #along index doesn't change
+        viirs_cross_5l = collocation_indexing['swath_index_y'] - 5 #change cross index
+        viirs_cross_5l[viirs_cross_5l<0] = -1
+        viirs_along_5l[viirs_cross_5l<0] = -1
+        viirs_data_5l = ir.load_collocate_viirs_dataset(viirs_file=vnp02_file[0],viirs_along=viirs_along_5l,
+                        viirs_cross=viirs_cross_5l,selected_datasets=viirs_02_datasets)
+
+        #get VIIRS observations 5 pixels away (right) from CALIPSO track
+        viirs_along_5r = collocation_indexing['swath_index_x']     #along index doesn't change
+        viirs_cross_5r = collocation_indexing['swath_index_y'] + 5 #change cross index
+        viirs_cross_5r[viirs_cross<0] = -1
+        viirs_cross_5r[viirs_cross_5r>3200] = -1
+        viirs_data_5r = ir.load_collocate_viirs_dataset(viirs_file=vnp02_file[0],viirs_along=viirs_along_5r,
+                        viirs_cross=viirs_cross_5r,selected_datasets=viirs_02_datasets)
+
         
         #finished
         #You are able to save collocated CALIPSO data (caliop_data) and VIIRS data (viirs_data) to any files.
