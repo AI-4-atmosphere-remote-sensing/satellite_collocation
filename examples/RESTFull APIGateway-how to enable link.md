@@ -37,4 +37,12 @@ In this page you jus need to **click Actions** and then **Deploy API**. A new bo
 ![text-here](./apigateway-images/5.png)
 ![text-here](./apigateway-images/6.png)
 ![text-here](./apigateway-images/7.png)
+
+### Step5 ***-You have a working API-***
+
+You are done configuring the API Gateway with the link! All you need to do is click that link or copy and paste it to a browser to perform your task.
+
+![text-here](./apigateway-images/8.png)
+
+
 ***Congratulations! You have a working API***
