@@ -161,4 +161,8 @@ You can also go to your Lambda function and you will see now the API Gateway is 
 
 ![text-here](./APIGateway_Images_dev/34.png)
 
+Finally, if you click or copy and paste the link to your browser you can see your desired action!
+
+![text-here](./APIGateway_Images_dev/35.png)
+
 ***We are all set!***
