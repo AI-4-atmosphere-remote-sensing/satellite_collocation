@@ -98,16 +98,6 @@ for clayer1km_file in clayer1km_files:
             n_col =  len(np.where(caliop_ind>=0)[0])
             print("Collocated pixels: %5d" % n_col)
             print ( '' )
-            
-        #save co-location indices to files
-        sav_name = 'CAL_' + cal_timeflag + '_VNP_' + vnp_timeflag + '_Index.h5'
-        sav_id = h5py.File(save_path+sav_name,'w')
-        sav_id.create_dataset('CALIPSO_Track_Index',data=collocation_indexing['track_index_x'])
-        sav_id.create_dataset('VIIRS_CrossTrack_Index',data=collocation_indexing['swath_index_y'])
-        sav_id.create_dataset('VIIRS_AlongTrack_Index',data=collocation_indexing['swath_index_x'])
-        sav_id.create_dataset('CALIPSO_VIIRS_Distance',data=collocation_indexing['swath_track_distance'])
-        sav_id.create_dataset('CALIPSO_VIIRS_Interval',data=collocation_indexing['swath_track_time_difference'])
-        sav_id.close() 
 
         #load collocated dataset(s) from CALIPSO and VIIRS
         calipso_dataset_names = ['Longitude','Latitude','Layer_Top_Temperature','Layer_Top_Pressure',
@@ -133,22 +123,33 @@ for clayer1km_file in clayer1km_files:
         viirs_data = ir.load_collocate_viirs_dataset(viirs_file=vnp02_file[0],viirs_along=viirs_along,
                      viirs_cross=viirs_cross,selected_datasets=viirs_02_datasets)
 
-        #get VIIRS observations 5 pixels away (left) from CALIPSO track
-        viirs_along_5l = collocation_indexing['swath_index_x']     #along index doesn't change
-        viirs_cross_5l = collocation_indexing['swath_index_y'] - 5 #change cross index
-        viirs_cross_5l[viirs_cross_5l<0] = -1
-        viirs_along_5l[viirs_cross_5l<0] = -1
-        viirs_data_5l = ir.load_collocate_viirs_dataset(viirs_file=vnp02_file[0],viirs_along=viirs_along_5l,
-                        viirs_cross=viirs_cross_5l,selected_datasets=viirs_02_datasets)
+        #get surrounding narrow band of collocated VIIRS pixels
+        #[left_end-collocated-right_end]
+        left_end = -2
+        right_end = 2
+        viirs_data_narrow_belt = ir.load_surrounding_viirs_dataset(viirs_file=vnp02_file[0],viirs_along=viirs_along,
+                                 viirs_cross=viirs_cross,left_end=left_end,right_end=right_end,selected_datasets=viirs_02_datasets)
 
-        #get VIIRS observations 5 pixels away (right) from CALIPSO track
-        viirs_along_5r = collocation_indexing['swath_index_x']     #along index doesn't change
-        viirs_cross_5r = collocation_indexing['swath_index_y'] + 5 #change cross index
-        viirs_cross_5r[viirs_cross<0] = -1
-        viirs_cross_5r[viirs_cross_5r>3200] = -1
-        viirs_data_5r = ir.load_collocate_viirs_dataset(viirs_file=vnp02_file[0],viirs_along=viirs_along_5r,
-                        viirs_cross=viirs_cross_5r,selected_datasets=viirs_02_datasets)
+        #save co-location indices to files
+        sav_name = 'CAL_' + cal_timeflag + '_VNP_' + vnp_timeflag + '_Index.h5'
+        sav_id = h5py.File(save_path+sav_name,'w')
+        sav_id.create_dataset('CALIPSO_Track_Index',data=collocation_indexing['track_index_x'])
+        sav_id.create_dataset('VIIRS_CrossTrack_Index',data=collocation_indexing['swath_index_y'])
+        sav_id.create_dataset('VIIRS_AlongTrack_Index',data=collocation_indexing['swath_index_x'])
+        sav_id.create_dataset('CALIPSO_VIIRS_Distance',data=collocation_indexing['swath_track_distance'])
+        sav_id.create_dataset('CALIPSO_VIIRS_Interval',data=collocation_indexing['swath_track_time_difference'])
 
-        
+        save_viirs_02_datasets_names = ['VIIRS_M01', 'VIIRS_M02', 'VIIRS_M03',
+                                        'VIIRS_M04', 'VIIRS_M05', 'VIIRS_M06',
+                                        'VIIRS_M07', 'VIIRS_M08', 'VIIRS_M09',
+                                        'VIIRS_M10', 'VIIRS_M11', 'VIIRS_M12',
+                                        'VIIRS_M13', 'VIIRS_M14', 'VIIRS_M15',
+                                        'VIIRS_M16']
+
+        for viirs_02_dataset in viirs_02_datasets:
+            sav_id.create_dataset(viirs_02_dataset,data=viirs_data_narrow_belt[viirs_02_dataset])
+        sav_id.close()
+
+       
         #finished
         #You are able to save collocated CALIPSO data (caliop_data) and VIIRS data (viirs_data) to any files.
