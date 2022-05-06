@@ -434,6 +434,65 @@ def load_collocate_viirs_dataset(viirs_file='',viirs_along='',viirs_cross='',sel
     fid.close()
 
     return save_data  
+
+
+# function name: load_surrounding_viirs_dataset
+# purpose: Read a narrow belt of VIIRS data near CALIPSO track. 
+# input: viirs_file = {FILENAME}
+# input: viirs_along = {1D array of VIIRS along track indices, index starts from 0}
+# input: viirs_cross = {1D array of VIIRS across track indices, index starts from 0}
+# input: left_end, a negative integer that defines the left most pixel away from CALIPSO track
+# input: right_end, a positive integer that defines the right most pixel away from CALIPSO track
+# input: 
+# input: selected_datasets = {Full name of selected 2D datasets}
+# output: 2D array(s) of selected datasets
+# note: viirs_along and viirs_cross must have the same number of elements
+
+# example: load a narrow belt with width 3 (from -1 to 1 cross the CALIPSO track)
+# usage: viirs_belt_datasets = load_surrounding_viirs_dataset(viirs_file='VNP02MOD.A2013050.2306.001.2017291120825.nc',
+#                                             viirs_along=[0,3,6,100,300],viirs_along=[0,150,633,700,2000],
+#                                             left_end=-1, right_end=1,
+#                                             selected_dataset=['observation_data/M02','observation_data/M05'])
+
+
+def load_surrounding_viirs_dataset(viirs_file='',viirs_along='',viirs_cross='',
+                                   left_end='',right_end='',selected_datasets=''):
+
+    ind_mid = np.where(viirs_along>=0)
+    if (len(ind_mid)<=0):
+        return
+
+    fid = Dataset(viirs_file)
+
+    save_data = {}
+
+    for selected_dataset in selected_datasets:
+
+        dataset = fid[selected_dataset][:]
+        empty_data = np.empty_like(dataset[viirs_along[ind_mid],0:(right_end-left_end+1)])
+
+        save_dataset = np.empty_like(dataset[viirs_along[ind_mid],0:(right_end-left_end+1)])
+
+        save_dataset[:,0-left_end] = dataset[viirs_along[ind_mid],viirs_cross[ind_mid]]
+
+        for cross_index in range(left_end,right_end+1):
+            if (cross_index == 0):
+                continue
+            this_cross = viirs_cross[ind_mid] + cross_index
+            this_along = viirs_along[ind_mid]
+            this_cross[this_cross<0] = -1
+            this_cross[this_cross>3200] = -1
+            this_along[this_cross<0] = -1
+
+            ind_this = np.where(this_cross>=0)
+            empty_data[ind_this,cross_index-left_end] = dataset[this_along,this_cross]
+            save_dataset[:,cross_index-left_end] = np.ma.masked_where(this_cross<0,empty_data[:,cross_index-left_end])
+        save_data[selected_dataset] = save_dataset
+
+    fid.close()
+    
+    return save_data
+
   
 # function name: load_collocate_caliop_dataset
 # purpose: Read CALIPSO dataset(s)
