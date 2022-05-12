@@ -73,7 +73,7 @@ for cal_file in cal_files:
     caliop_lon = clayer1km_geo['Longitude']
     caliop_dts = clayer1km_geo['Profile_Datetime']
     
-    collocation_indexing = gc.track_disk_collocation(track_lat=caliop_lat, track_lon=caliop_lon, track_time=caliop_dts,
+    collocation_indexing = gc.track_disk_collocation_new(track_lat=caliop_lat, track_lon=caliop_lon, track_time=caliop_dts,
                            disk_lat=disk_lat_1km, disk_lon=disk_lon_1km,
                            disk_resolution=geo_resolution,maximum_distance=maximum_distance)
 
