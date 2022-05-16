@@ -18,10 +18,10 @@ import argparse
 import string
 
 parser = argparse.ArgumentParser(description='This code is an example of collocating CALIPSO and ABI onboard GOESR_16')
-parser.add_argument('-md','--maximum_distance', help='Define the maximum distance of collocated pixels in kilometer', required=True)
+parser.add_argument('-md','--maximum_distance', help='Define the maximum distance of collocated pixels in kilometer', default=5.0)
 parser.add_argument('-gr','--geo_resolution', help='Define the pixel resolution of ABI in kilometer', required=True)
 parser.add_argument('-tp','--track_instrument_path', help='Define the path of CALIPSO L2 files', required=True)
-parser.add_argument('-sp','--save_path', help='Define the path of output files', required=True)
+parser.add_argument('-sp','--save_path', help='Define the path of output files', default='./')
 parser.add_argument('-ymd','--yearmonthday', help='Define the date flag of CALIPSO files, format YYYYMMDD', default=argparse.SUPPRESS)
 
 args = vars(parser.parse_args())
