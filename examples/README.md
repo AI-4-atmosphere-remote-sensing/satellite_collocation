@@ -29,11 +29,11 @@ python main.py --help
 
 Required Command Line Arguments:
 
-'-md',  '--maximum_distance', define the maximum distance of collocated pixels in kilometer
+'-md',  '--maximum_distance', define the maximum distance of collocated pixels in kilometer, default value is 5 km
 
-'-mt',  '--maximum_timeinterval', define the maximum time interval of collocated pixels in minutes
+'-mt',  '--maximum_timeinterval', define the maximum time interval of collocated pixels in minutes, default value is 15 minutes
 
-'-sr',  '--swath_resolution', define the pixel resolution of swath instrument in kilometer
+'-sr',  '--swath_resolution', define the pixel resolution of swath instrument in kilometer, default value is 0.75 km
 
 '-tp',  '--track_instrument_path', define the path of CALIPSO L2 files
 
@@ -41,7 +41,11 @@ Required Command Line Arguments:
 
 '-sdp', '--swath_data_path', define the path of VIIRS VNP02 files
 
-'-sp',  '--save_path', define the path of output files
+'-sp',  '--save_path', define the path of output files, default value './' current path
+
+Example:
+
+python main.py -md 5 -mt 15 -sr 1 -tp "/path/to/the/calipso/" -sgp "/path/to/the/VNP03/" -sdp "/path/to/the/VNP02/" -sp "/path/to/the/save_index/"
 
 
 #### 1.3 Output:
