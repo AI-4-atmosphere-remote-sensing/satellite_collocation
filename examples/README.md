@@ -86,4 +86,5 @@ collocation_dask_slurm.py shows how to utilize Dask to run in parallel via separ
 This example explains how to run the collocation code on AWS.
 
 Prerequisites:
-1. The AWS EC2 instance with the collocation code is running. 
+1. The user has AWS account and credentials to run Lambda functions.
+2. The user has access to an AWS EC2 instance where the collocation code can execute. 
