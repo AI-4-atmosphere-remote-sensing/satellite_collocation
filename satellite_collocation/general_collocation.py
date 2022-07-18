@@ -275,6 +275,121 @@ def track_swath_collocation(track_lat='',track_lon='',track_time='',
             'track_index_x':track_ind_x, 'swath_track_distance':swath_track_dist,
             'swath_track_time_difference':swath_track_tdif}
 
+
+def track_disk_collocation_test(track_lat='',track_lon='',track_time='',
+                           disk_lat='',disk_lon='',disk_resolution='',
+                           maximum_distance=''):
+
+    n_profile = len(track_lat)
+
+    disk_ind_x = np.full(n_profile,-1,dtype='i')
+    disk_ind_y = np.full(n_profile,-1,dtype='i')
+    disk_track_dist = np.full(n_profile,-9999.99)
+
+    #collocation method 1:
+    dist = np.zeros
+    disk_x = disk_lon.shape[0]
+    disk_y = disk_lon.shape[1]
+
+    dist_threshold = 200 #kilometers
+    step_x = int ((dist_threshold / disk_resolution) / 3)
+    step_y = int ((dist_threshold / disk_resolution) / 3)
+    step_x = min(max(step_x,1), disk_x)
+    step_y = min(max(step_y,1), disk_y)
+
+    track_resolution = 1.0
+    step_t = int ( ( (step_x + step_y)*disk_resolution ) / track_resolution / 2.0 )
+    step_t = min(max(step_t,1), len(track_lon))
+
+    distances = sg.targets_distance(track_lat[::step_t],track_lon[::step_t],disk_lat[::step_x,::step_y],disk_lon[::step_x,::step_y])
+
+    if (distances.min() >= dist_threshold):
+        #print ('No collocation')
+        return {'disk_index_x':disk_ind_x, 'disk_index_y':disk_ind_y,
+                'disk_track_distance':disk_track_dist}
+
+    if_last_pixel_collocated = False
+    last_center_x = -1
+    last_center_y = -1
+
+    for i_profile in range(len(track_lon)):
+
+#        print ( 'Pixel ID:', i_profile )
+
+        #start quick search if last pixel was collocated
+        if (if_last_pixel_collocated):
+#            print ('Quick Search')
+            search_s1 = max((last_center_x-5), 0)
+            search_e1 = min((last_center_x+5), disk_lat.shape[0])
+            search_s2 = max((last_center_y-5), 0)
+            search_e2 = min((last_center_y+5), disk_lat.shape[1])
+
+            refine_dist = sg.target_distance(track_lat[i_profile],track_lon[i_profile],
+                                     disk_lat[search_s1:search_e1,search_s2:search_e2],
+                                     disk_lon[search_s1:search_e1,search_s2:search_e2])
+
+            if (refine_dist.min() < maximum_distance):
+                refine_ind = np.unravel_index(refine_dist.argmin(), refine_dist.shape)
+                disk_ind_x[i_profile] = refine_ind[0] + search_s1
+                disk_ind_y[i_profile] = refine_ind[1] + search_s2
+                disk_track_dist[i_profile] = refine_dist.min()
+
+                if_last_pixel_collocated = True
+                last_center_x = disk_ind_x[i_profile]
+                last_center_y = disk_ind_y[i_profile]
+
+                continue
+
+        #quick search failed
+        #print ('General Search')
+        
+        i_profile_step_t = i_profile//step_t
+        this_dist = distances[:,:,i_profile_step_t]
+
+        if (this_dist.min() >= dist_threshold):
+            if_last_pixel_collocated = False
+            last_center_x = -1
+            last_center_y = -1
+            continue
+
+        min_ind = np.unravel_index(this_dist.argmin(), this_dist.shape)
+
+        search_s1 = max(int(min_ind[0] * step_x - step_x/2 - step_t/2), 0)
+        search_e1 = min(int(min_ind[0] * step_x + step_x/2 + step_t/2), disk_lat.shape[0])
+
+        search_s2 = max(int(min_ind[1] * step_y - step_y/2 - step_t/2), 0)
+        search_e2 = min(int(min_ind[1] * step_y + step_y/2 + step_t/2), disk_lat.shape[1])
+
+        refine_dist = sg.target_distance(track_lat[i_profile],track_lon[i_profile],
+                                         disk_lat[search_s1:search_e1,search_s2:search_e2],
+                                         disk_lon[search_s1:search_e1,search_s2:search_e2])
+
+        if (refine_dist.min() >= maximum_distance):
+            if_last_pixel_collocated = False
+            last_center_x = -1
+            last_center_y = -1
+            continue
+
+        refine_ind = np.unravel_index(refine_dist.argmin(), refine_dist.shape)
+        disk_ind_x[i_profile] = refine_ind[0] + search_s1
+        disk_ind_y[i_profile] = refine_ind[1] + search_s2
+
+        disk_track_dist[i_profile] = refine_dist.min()
+        #disk_track_tdif[i_profile] = (track_time[i_profile] - disk_time).total_seconds()/60.
+
+        if_last_pixel_collocated = True
+        last_center_x = disk_ind_x[i_profile]
+        last_center_y = disk_ind_y[i_profile]
+
+    uncollocated_index = np.where(disk_track_dist<0)
+    if (len(uncollocated_index[0])>0):
+        disk_ind_x[uncollocated_index] = -1
+        disk_ind_y[uncollocated_index] = -1
+        disk_track_dist[uncollocated_index] = -9999.99
+
+    return {'disk_index_x':disk_ind_x, 'disk_index_y':disk_ind_y,
+            'disk_track_distance':disk_track_dist}
+
 # function name: track_disk_collocation
 # purpose: Find Collocation Pixels from a track (1-D) of geolocations and a Geostationary Disk (2-D) of geolocations
 # input: track_lat, track_lon, track_time
