@@ -45,7 +45,7 @@ Required Command Line Arguments:
 
 Example:
 
-python main.py -md 5 -mt 15 -sr 1 -tp "/path/to/the/calipso/" -sgp "/path/to/the/VNP03/" -sdp "/path/to/the/VNP02/" -sp "/path/to/the/save_index/"
+python main.py -md 15 -mt 50 -sr 1 -tp ../../resources/data/sample_input_data/CALIPSO_LID_L2_01kmCLay/ -sgp ../../resources/data/sample_input_data/VIIRS_VNP03MOD/ -sdp ../../resources/data/sample_input_data/VIIRS_VNP02MOD/ -sp ../../resources/data/sample_output_data/
 
 
 #### 1.3 Output:
@@ -87,4 +87,4 @@ This example explains how to run the collocation code on AWS.
 
 Prerequisites:
 1. The user has AWS account and credentials to run Lambda functions.
-2. The user has access to an AWS EC2 instance where the collocation code can execute. 
+2. The user has access to an AWS EC2 instance where the collocation code can execute.
