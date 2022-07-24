@@ -45,7 +45,7 @@ Required Command Line Arguments:
 
 Example:
 
-python main.py -md 15 -mt 50 -sr 1 -tp ../../resources/data/sample_input_data/CALIPSO_LID_L2_01kmCLay/ -sgp ../../resources/data/sample_input_data/VIIRS_VNP03MOD/ -sdp ../../resources/data/sample_input_data/VIIRS_VNP02MOD/ -sp ../../resources/data/sample_output_data/
+python main.py -md 15 -mt 50 -sr 1 -tp ../../resources/data/sample_input_data/CALIPSO_LID_L2_01kmCLay/ -sgp ../../resources/data/sample_input_data/VIIRS_Coordinates_VNP03MOD/ -sdp ../../resources/data/sample_input_data/VIIRS_Attributes_VNP02MOD/ -sp ../../resources/data/sample_output_data/
 
 
 #### 1.3 Output:
