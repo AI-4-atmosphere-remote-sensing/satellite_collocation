@@ -17,7 +17,8 @@ parser = argparse.ArgumentParser(description='This code is an example of colloca
 parser.add_argument('-md','--maximum_distance', help='Define the maximum distance of collocated pixels in kilometer', default=5.0)
 parser.add_argument('-mt','--maximum_timeinterval', help='Define the maximum time interval of collocated pixels in minutes', default=15.0)
 parser.add_argument('-sr','--swath_resolution', help='Define the pixel resolution of swath instrument in kilometer', default=0.75)
-parser.add_argument('-tp','--track_instrument_path', help='Define the path of CALIPSO L2 files', required=True)
+parser.add_argument('-tp1','--track_instrument_path1', help='Define the path of CALIPSO L2 1km files', required=True)
+parser.add_argument('-tp5','--track_instrument_path5', help='Define the path of CALIPSO L2 5km files', required=True)
 parser.add_argument('-sgp','--swath_geo_path', help='Define the path of VIIRS VNP03 files', required=True)
 parser.add_argument('-sdp','--swath_data_path', help='Define the path of VIIRS VNP02 files', required=True)
 parser.add_argument('-sp','--save_path', help='Define the path of output files', default='./')
@@ -29,7 +30,8 @@ maximum_distance = float(args['maximum_distance'])
 maximum_interval = float(args['maximum_timeinterval'])
 viirs_resolution = float(args['swath_resolution'])
 
-clayer1km_path = args['track_instrument_path'].strip()
+clayer1km_path = args['track_instrument_path1'].strip()
+clayer5km_path = args['track_instrument_path5'].strip()
 vnp03_path = args['swath_geo_path'].strip()
 vnp02_path = args['swath_data_path'].strip()
 save_path = args['save_path'].strip()
@@ -40,6 +42,7 @@ save_path = args['save_path'].strip()
 #viirs_resolution = 0.75 #kilometer
 
 #clayer1km_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/CALIPSO-L2-01km-CLayer/'
+#clayer5km_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/CALIPSO-L2-05km-CLayer/'
 #vnp03_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/VNP03MOD-VIIRS-Coordinates/'
 #vnp02_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/VNP02MOD-VIIRS-Attributes/'
 #save_path = '/umbc/rs/nasa-access/users/jianwu/collocation-test-data/collocation-output/'
@@ -56,6 +59,12 @@ for clayer1km_file in clayer1km_files:
     pos = cal_name.find('V4-10.')
     cal_timeflag = cal_name[pos+6:pos+27]
     #print (cal_timeflag)
+    
+    #find clayer5km file
+    clayer5km_files = sorted(glob.glob(clayer5km_path+'*'+cal_timeflag+'*.hdf'))
+    if (len(clayer5km_files)!=1):
+        break
+    clayer5km_file = clayer5km_files[0]
 
     clayer1km_geo = ir.load_caliop_clayer1km_geoloc(cal_1km_file=clayer1km_file)
     caliop_dts = clayer1km_geo['Profile_Datetime']
@@ -100,12 +109,35 @@ for clayer1km_file in clayer1km_files:
             print ( '' )
 
         #load collocated dataset(s) from CALIPSO and VIIRS
-        calipso_dataset_names = ['Longitude','Latitude','Layer_Top_Temperature','Layer_Top_Pressure',
-                            'IGBP_Surface_Type','Snow_Ice_Surface_Type','Number_Layers_Found',
-                            'Feature_Classification_Flags']
-
-        caliop_data = ir.load_collocate_caliop_dataset(calipso_file=clayer1km_file,calipso_index=collocation_indexing['track_index_x'],
-                      selected_datasets=calipso_dataset_names)
+        calipso_dataset_clayer_names_1km = ['Longitude','Latitude','Layer_Top_Altitude','Layer_Base_Altitude',
+                                           'Layer_Top_Temperature','Layer_Base_Temperature', 'Opacity_Flag',
+                                           'Integrated_Attenuated_Total_Color_Ratio',
+                                           'Integrated_Attenuated_Backscatter_532',
+                                           'Integrated_Attenuated_Backscatter_1064',
+                                           'IGBP_Surface_Type','Snow_Ice_Surface_Type','Number_Layers_Found',
+                                           'Feature_Classification_Flags']
+        
+        collocation_index_1km = np.where(caliop_ind>=0)[0]
+        collocation_index_5km = collocation_index_1km//5
+        
+        caliop_data_1km = ir.load_collocate_caliop_dataset(calipso_file=clayer1km_file,calipso_index=collocation_index_1km,
+                      selected_datasets=calipso_dataset_clayer_names_1km)
+        
+        calipso_dataset_clayer_names_5km = ['Longitude','Latitude','Layer_Top_Altitude','Layer_Base_Altitude',
+                                           'Layer_Top_Temperature','Layer_Base_Temperature', 'Opacity_Flag',
+                                           'Final_532_Lidar_Ratio', 'Integrated_Particulate_Depolarization_Ratio',
+                                           'Integrated_Attenuated_Total_Color_Ratio',
+                                           'Integrated_Attenuated_Backscatter_532',
+                                           'Integrated_Attenuated_Backscatter_1064',
+                                           'Feature_Optical_Depth_532', 'Number_Layers_Found',
+                                           'Column_Optical_Depth_Tropospheric_Aerosols_532',
+                                           'Column_Optical_Depth_Stratospheric_Aerosols_532',
+                                           'Column_Optical_Depth_Tropospheric_Aerosols_1064',
+                                           'Column_Optical_Depth_Stratospheric_Aerosols_1064',
+                                           'Feature_Classification_Flags']
+        
+        caliop_data_5km = ir.load_collocate_caliop_dataset(calipso_file=clayer5km_file,calipso_index=collocation_index_5km,
+                      selected_datasets=calipso_dataset_clayer_names_5km)
 
         vnp02_file = glob.glob(vnp02_path+'*'+vnp_timeflag+'*.nc')
         if (len(vnp02_file)!=1):
