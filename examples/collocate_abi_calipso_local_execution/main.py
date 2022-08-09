@@ -54,6 +54,11 @@ abi_spacemask_1km = fid['SpaceMask'][:]
 valid_index_1km = np.where(abi_spacemask_1km==1)
 fid.close()
 
+disk_lon_1km = np.full([abi_lat_1km.shape[0],abi_lat_1km.shape[1]],fill_value=-9999.99)
+disk_lat_1km = np.full([abi_lat_1km.shape[0],abi_lat_1km.shape[1]],fill_value=-9999.99)
+disk_lon_1km[valid_index_1km] = abi_lon_1km[valid_index_1km]
+disk_lat_1km[valid_index_1km] = abi_lat_1km[valid_index_1km]
+
 for cal_file in cal_files:
 
     #print (clayer1km_file)
@@ -78,24 +83,24 @@ for cal_file in cal_files:
                            disk_lat=disk_lat_1km, disk_lon=disk_lon_1km,
                            disk_resolution=geo_resolution,maximum_distance=maximum_distance)
 
-    disk_ind_x = collocation_indexing['disk_index_x']
-    disk_ind_y = collocation_indexing['disk_index_y']
+    disk_ind_meridional = collocation_indexing['disk_index_meridional']
+    disk_ind_zonal = collocation_indexing['disk_ind_zonal']
     calipso_ind = np.arange(len(caliop_lat))
 
-    if ( len(np.where(disk_ind_x>=0)[0])<=1 ):
+    if ( len(np.where(disk_ind_meridional>=0)[0])<=1 ):
         print ( 'No collocate pixel found' )
         print ( '' )
         continue
     else:
-        n_col =  len(np.where(disk_ind_x>=0)[0])
+        n_col =  len(np.where(disk_ind_meridional>=0)[0])
         print("Collocated pixels: %5d" % n_col)
         print ( '' )
 
-        use_index = np.where(disk_ind_x>=0)
-        abi_index1 = collocation_indexing['disk_index_x'][use_index]
-        abi_index2 = collocation_indexing['disk_index_y'][use_index]
+        use_index = np.where(disk_ind_meridional>=0)
+        abi_index1 = collocation_indexing['disk_index_meridional'][use_index]
+        abi_index2 = collocation_indexing['disk_ind_zonal'][use_index]
         distance = collocation_indexing['disk_track_distance'][use_index]
-        #disk_track_tdiff = collocation_indexing['disk_track_time_difference'][use_index]
+
         clat = caliop_lat[use_index]
         clon = caliop_lon[use_index]
         alat = disk_lat_1km[abi_index1,abi_index2]
@@ -109,8 +114,7 @@ for cal_file in cal_files:
         sid.create_dataset('ABI_Lat',data=alat)
         sid.create_dataset('ABI_Lon',data=alon)
         sid.create_dataset('CALIPSO_ABI_Distance',data=distance)
-        #sid.create_dataset('CALIPSO_ABI_TimeDiff',data=disk_track_tdiff)
         sid.create_dataset('CALIPSO_Index',data=calipso_ind[use_index])
-        sid.create_dataset('ABI_Index1',data=abi_index1)
-        sid.create_dataset('ABI_Index2',data=abi_index2)
+        sid.create_dataset('ABI_Index_Meridional',data=abi_index1)
+        sid.create_dataset('ABI_Index_Zonal',data=abi_index2)
         sid.close()
