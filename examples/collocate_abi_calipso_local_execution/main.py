@@ -70,15 +70,15 @@ for cal_file in cal_files:
     clayer1km_geo = ir.load_caliop_clayer1km_geoloc(cal_1km_file=cal_file)
     caliop_dts = clayer1km_geo['Profile_Datetime']
     caliop_timerange = DateTimeRange(caliop_dts[0],caliop_dts[-1])
-   
+
     print ('Find collocation pixels for:')
     print ('CALIPSO File:', cal_name)
-    
+
     caliop_lat = clayer1km_geo['Latitude']
     caliop_lon = clayer1km_geo['Longitude']
     caliop_dts = clayer1km_geo['Profile_Datetime']
-    
-    #a new function "track_disk_collocation_test" is used here, which largely increase the computing efficiency 
+
+    #a new function "track_disk_collocation_test" is used here, which largely increase the computing efficiency
     collocation_indexing = gc.track_disk_collocation_test(track_lat=caliop_lat, track_lon=caliop_lon, track_time=caliop_dts,
                            disk_lat=disk_lat_1km, disk_lon=disk_lon_1km,
                            disk_resolution=geo_resolution,maximum_distance=maximum_distance)
@@ -118,3 +118,31 @@ for cal_file in cal_files:
         sid.create_dataset('ABI_Index_Meridional',data=abi_index1)
         sid.create_dataset('ABI_Index_Zonal',data=abi_index2)
         sid.close()
+
+        #max time interval: 10 minites
+        maximum_interval = 10
+        print("caliop_start_time:" , caliop_timerange.start_datetime)
+        print("caliop_start_time - interval:" , caliop_timerange.start_datetime - datetime.timedelta(minutes=maximum_interval))
+        print("caliop_end_time + interval:" , caliop_timerange.end_datetime + datetime.timedelta(minutes=maximum_interval))
+        expanded_caliop_timerange = DateTimeRange(caliop_timerange.start_datetime - datetime.timedelta(minutes=maximum_interval), caliop_timerange.end_datetime + datetime.timedelta(minutes=maximum_interval))
+        abi_path = '/umbc/rs/nasa-access/data/abi/OR_ABI-L1b-RadF/'
+        abi_files = glob.glob(abi_path+'*.nc')
+        abi_timeranges = ir.get_abi_timerange(abi_files)
+        for i, abi_file in enumerate(abi_files):
+        #for i, abi_timerange in enumerate(abi_timeranges):
+            abi_timerange = ir.get_abi_timerange([abi_file])[0]
+            print("abi_start_time:", abi_timerange.start_datetime)
+            print("abi_end_time:", abi_timerange.end_datetime)
+            if expanded_caliop_timerange.is_intersection(abi_timerange):
+                print("find one time overlap with abi file:", abi_file)
+                abi_name  = os.path.basename(abi_file)
+                abi_datasets = ['/Rad']
+
+                #get observations of collocated ABI pixels and save into a seperate file for each ABI input
+                abi_data = ir.load_collocate_abi_dataset(abi_file=abi_file,abi_along=disk_ind_y,
+                     abi_cross=disk_ind_x,selected_datasets=abi_datasets)
+                save_name = 'Ind_CAL_' + cal_timeflag + '_ABI_G16_1km_' + abi_name[0:41] + '.h5'
+                sav_id = h5py.File(save_path+save_name,'w')
+                for abi_dataset in abi_datasets:
+                   sav_id.create_dataset(abi_dataset, data=abi_data[abi_dataset])
+                sav_id.close()

@@ -60,7 +60,7 @@ def get_cris_timerange(crisfiles):
         dt_end = dt_start + datetime.timedelta(minutes=granule)
         timerange.append( DateTimeRange(dt_start,dt_end) )
 
-    return timerange 
+    return timerange
 
 
 # function name: get_abi_timerange
@@ -82,10 +82,10 @@ def get_abi_timerange(abifiles):
         dt_start = datetime.datetime.strptime(abi_startflag,'%Y%j%H%M%S')
         dt_end = datetime.datetime.strptime(abi_endflag,'%Y%j%H%M%S')
         timerange.append( DateTimeRange(dt_start,dt_end) )
-    
-    return timerange 
 
-  
+    return timerange
+
+
 # function name: load_abi_geoloc
 # purpose: Read 2D Latitude/Longitude from GOES-R ABI L1 file
 # input: abi_l1_file = {FILENAME}
@@ -94,7 +94,7 @@ def get_abi_timerange(abifiles):
 # usage: abi_l1_geo = load_abi_geoloc(abi_file='...')
 
 def load_abi_geoloc(abi_file='',params={}):
-    
+
     abi_filename = os.path.basename(abi_file)
     abi_startflag = abi_filename[abi_filename.find('_s')+2:abi_filename.find('_s')+15]
     abi_endflag = abi_filename[abi_filename.find('_e')+2:abi_filename.find('_e')+15]
@@ -102,7 +102,7 @@ def load_abi_geoloc(abi_file='',params={}):
     edt = datetime.datetime.strptime(abi_endflag,'%Y%j%H%M%S')
     dur_half = (edt-sdt)/2.0
     mdt = sdt + datetime.timedelta(seconds=dur_half.seconds)
-    
+
     #ABI Height:
     abi_height = 42164.16 #in kilometer
     h = abi_height
@@ -111,7 +111,7 @@ def load_abi_geoloc(abi_file='',params={}):
     d = h*h - r_eq*r_eq
     f = (1.0/298.257222101)
     fp = (1.0/((1.0-f)*(1.0-f)))
-    
+
     #read constant
     fid = Dataset(abi_file,'r')
     x = fid.variables['x']
@@ -121,13 +121,13 @@ def load_abi_geoloc(abi_file='',params={}):
     proj = fid.variables['goes_imager_projection']
     lon0 = getattr(proj,'longitude_of_projection_origin')
     lat0 = getattr(proj,'latitude_of_projection_origin')
-    
+
     fid.close()
-    
-    #calculate lat/lon 
+
+    #calculate lat/lon
     nx = len(lamda)
     ny = len(theta)
-    
+
     lat = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
     lon = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
     c1  = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
@@ -138,11 +138,11 @@ def load_abi_geoloc(abi_file='',params={}):
     s2  = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
     s3  = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
     sxy = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
-    
+
     lamda_geos = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
     theta_geos = np.full([ny,nx],fill_value=np.nan,dtype=np.float32)
     space_mask = np.zeros([ny,nx],dtype=np.int8)
-    
+
     for j in range(ny):
         lamda_geos[j,:] = np.arctan( np.tan(lamda)/np.cos(theta[j]) )
         theta_geos[j,:] = np.arcsin( np.sin(theta[j])*np.cos(lamda) )
@@ -150,34 +150,34 @@ def load_abi_geoloc(abi_file='',params={}):
     c1 = (h * np.cos(lamda_geos) * np.cos(theta_geos)) * (h * np.cos(lamda_geos) * np.cos(theta_geos))
     c2 = (np.cos(theta_geos) * np.cos(theta_geos) + fp * np.sin(theta_geos) * np.sin(theta_geos)) * d
     valid_ind = np.where(c1>=c2)
-    
+
     sd[valid_ind] = np.sqrt(c1[valid_ind]-c2[valid_ind])
     cosx = np.cos(lamda_geos[valid_ind])
     cosy = np.cos(theta_geos[valid_ind])
     sinx = np.sin(lamda_geos[valid_ind])
     siny = np.sin(theta_geos[valid_ind])
-    
+
     sn[valid_ind] = ( (h * cosx * cosy - sd[valid_ind]) /
                       (cosy * cosy + fp * siny * siny) )
     s1[valid_ind] = h - sn[valid_ind] * cosx * cosy
     s2[valid_ind] = sn[valid_ind] * sinx * cosy
     s3[valid_ind] = -1.0 * sn[valid_ind] * siny
-    
+
     sxy[valid_ind] = np.sqrt(s1[valid_ind]*s1[valid_ind] + s2[valid_ind]*s2[valid_ind])
     lon[valid_ind] = np.arctan(s2[valid_ind]/s1[valid_ind]) + lon0 * pi/180.0
     lat[valid_ind] = np.arctan(-1.0*fp*(s3[valid_ind]/sxy[valid_ind]))
-    
+
     lon[valid_ind] = lon[valid_ind] * 180.0/pi
     lat[valid_ind] = lat[valid_ind] * 180.0/pi
-    
+
     lon[lon<-180.0] += 360.0
     lon[lon >180.0] += -360.0
-    
+
     valid = np.where( (abs(lat)<=90) & (abs(lon)<=180) )
     space_mask[valid] = 1
     lat[space_mask==0] = np.nan
     lon[space_mask==0] = np.nan
-    
+
     return {'Latitude':lat,'Longitude':lon,'Space_Mask':space_mask, 'Datetime':[sdt,mdt,edt]}
 
 # function name: load_caliop_clayer1km_geoloc
@@ -187,7 +187,7 @@ def load_abi_geoloc(abi_file='',params={}):
 # usage: caliop_clayer1km_geo = load_caliop_clayer1km_geo(cal_1km_file='...')
 
 def load_caliop_clayer1km_geoloc(cal_1km_file='',params={}):
-  
+
     try:
         cal_1km_id = SD(cal_1km_file,SDC.READ)
         cal_lon = cal_1km_id.select('Longitude').get()
@@ -228,7 +228,7 @@ def load_caliop_clayer1km_geoloc(cal_1km_file='',params={}):
 
     return {'Longitude':cal_lon, 'Latitude':cal_lat, 'IGBP_Type':cal_igbp, 'Snow_Ice_Type':cal_snic, 'Profile_Datetime':np.asarray(profile_dts)}
 
-  
+
 # function name: load_viirs_vnp03_geoloc
 # purpose: Read 2D Latitude/Longitude from VIIRS SNPP L1 Product
 # input: vnp03_file = {FILENAME}
@@ -252,8 +252,8 @@ def load_viirs_vnp03_geoloc(vnp03_file='',params={}):
         lon = -9999.99
         lsm = -1
     return {'Longitude':lon, 'Latitude':lat, 'LandSeaMask':lsm, 'Datetime':[sdt,mdt,edt]}
-  
- 
+
+
 # function name: load_modis_mod03_geoloc
 # purpose: Read 2D Latitude/Longitude from MODIS L1 MO(Y)D03 Product
 # input: mod03_file = {FILENAME}
@@ -277,7 +277,7 @@ def load_modis_mod03_geoloc(mod03_file='',params={}):
         lon = -9999.99
         lsm = -1
     return {'Longitude':lon, 'Latitude':lat, 'LandSeaMask':lsm, 'Datetime':[sdt,mdt,edt]}
-  
+
 # function name: load_modis_mod02_reflectance_1km
 # purpose: Read 2D uncorrected reflectance (raw data) from MODIS L1 MO(Y)D02 Product
 # input: mod02_file = {FILENAME}
@@ -317,7 +317,7 @@ def load_modis_mod02_reflectance_1km(m02_file='',band='',params={}):
     r05 = np.squeeze(r500[2,:,:])
     r06 = np.squeeze(r500[3,:,:])
     r07 = np.squeeze(r500[4,:,:])
-    
+
     r1km_id = m02_id.select('EV_1KM_RefSB')
     r1km_scale = r1km_id.attributes()['reflectance_scales']
     r1km_offset= r1km_id.attributes()['reflectance_offsets']
@@ -344,9 +344,9 @@ def load_modis_mod02_reflectance_1km(m02_file='',band='',params={}):
     r18 = np.squeeze(r1km[12,:,:])
     r19 = np.squeeze(r1km[13,:,:])
     r26 = np.squeeze(r1km[14,:,:])
-    
+
     m02_id.end()
-    
+
     return {'R01_Uncorrected':r01, 'R02_Uncorrected':r02,
             'R03_Uncorrected':r03, 'R04_Uncorrected':r04,
             'R05_Uncorrected':r05, 'R06_Uncorrected':r06, 'R07_Uncorrected':r07,
@@ -355,7 +355,7 @@ def load_modis_mod02_reflectance_1km(m02_file='',band='',params={}):
             'R13l_Uncorrected':r13l, 'R13h_Uncorrected':r13h, 'R14l_Uncorrected':r14l, 'R14h_Uncorrected':r14h,
             'R15_Uncorrected':r15, 'R16_Uncorrected':r16, 'R17_Uncorrected':r17, 'R18_Uncorrected':r18,
             'R19_Uncorrected':r19, 'R26_Uncorrected':r26 }
- 
+
 # function name: load_modis_mod02_emission_1km
 # purpose: Read 2D radiance (IR) from MODIS L1 MO(Y)D02 Product
 # input: mod02_file = {FILENAME}
@@ -404,6 +404,34 @@ def load_modis_mod02_emission_1km(m02_file='',params={}):
             'Rad33':e33, 'Rad34':e34,
             'Rad35':e35, 'Rad36':e36}
 
+# function name: load_collocate_abi_dataset
+# purpose: Read 2D ABI dataset(s) into 1D array(s)
+# input: abi_file = {FILENAME}
+# input: abi_along = {1D array of ABI along track indices, index starts from 0}
+# input: abi_cross = {1D array of ABI across track indices, index starts from 0}
+# input: selected_datasets = {Full name of selected 2D datasets}
+# output: 1D array(s) of selected datasets
+# note: abi_along and abi_cross must have the same number of elements
+# usage: abi_datasets = load_collocate_abi_dataset(abi_file='VNP02MOD.A2013050.2306.001.2017291120825.nc',
+#                                                      abi_along=[0,3,6,100,300],abi_along=[0,150,633,700,2000],
+#                                                      selected_dataset=['/Rad])
+def load_collocate_abi_dataset(abi_file='',abi_along='',abi_cross='',selected_datasets=''):
+
+    ind = np.where(abi_along>=0)
+    if (len(ind)<=0):
+        return
+    fid = Dataset(abi_file)
+
+    save_data = {}
+    for selected_dataset in selected_datasets:
+        dataset = fid[selected_dataset][:]
+        save_dataset = dataset[abi_along[ind],abi_cross[ind]]
+        #sid.create_dataset(selected_dataset,data=save_dataset)
+
+        save_data[selected_dataset] = save_dataset
+    fid.close()
+
+    return save_data
 
 # function name: load_collocate_viirs_dataset
 # purpose: Read 2D VIIRS dataset(s) into 1D array(s)
@@ -415,8 +443,8 @@ def load_modis_mod02_emission_1km(m02_file='',params={}):
 # note: viirs_along and viirs_cross must have the same number of elements
 # usage: viirs_datasets = load_collocate_viirs_dataset(viirs_file='VNP02MOD.A2013050.2306.001.2017291120825.nc',
 #                                                      viirs_along=[0,3,6,100,300],viirs_along=[0,150,633,700,2000],
-#                                                      selected_dataset=['observation_data/M02','observation_data/M05'])  
-  
+#                                                      selected_dataset=['observation_data/M02','observation_data/M05'])
+
 def load_collocate_viirs_dataset(viirs_file='',viirs_along='',viirs_cross='',selected_datasets=''):
 
     ind = np.where(viirs_along>=0)
@@ -433,17 +461,17 @@ def load_collocate_viirs_dataset(viirs_file='',viirs_along='',viirs_cross='',sel
         save_data[selected_dataset] = save_dataset
     fid.close()
 
-    return save_data  
+    return save_data
 
 
 # function name: load_surrounding_viirs_dataset
-# purpose: Read a narrow belt of VIIRS data near CALIPSO track. 
+# purpose: Read a narrow belt of VIIRS data near CALIPSO track.
 # input: viirs_file = {FILENAME}
 # input: viirs_along = {1D array of VIIRS along track indices, index starts from 0}
 # input: viirs_cross = {1D array of VIIRS across track indices, index starts from 0}
 # input: left_end, a negative integer that defines the left most pixel away from CALIPSO track
 # input: right_end, a positive integer that defines the right most pixel away from CALIPSO track
-# input: 
+# input:
 # input: selected_datasets = {Full name of selected 2D datasets}
 # output: 2D array(s) of selected datasets
 # note: viirs_along and viirs_cross must have the same number of elements
@@ -490,13 +518,13 @@ def load_surrounding_viirs_dataset(viirs_file='',viirs_along='',viirs_cross='',
         save_data[selected_dataset] = save_dataset
 
     fid.close()
-    
+
     return save_data
 
-  
+
 # function name: load_collocate_caliop_dataset
 # purpose: Read CALIPSO dataset(s)
-# input: calipso_file = {FILENAME} 
+# input: calipso_file = {FILENAME}
 # input: calipso_index = {1D array of CALIPSO profile indices, index starts from 0}
 # input: selected_datasets = {Full name of selected CALIPSO datasets}
 # output: 1D array(s) of selected datasets
@@ -504,7 +532,7 @@ def load_surrounding_viirs_dataset(viirs_file='',viirs_along='',viirs_cross='',
 #                                                        calipso_index=[0,3,6,100,300],
 #                                                        selected_dataset=['Longitude','Latitude',
 #                                                        'IGBP_Surface_Type','Snow_Ice_Surface_Type',
-#                                                        'Number_Layers_Found','Feature_Classification_Flags'])  
+#                                                        'Number_Layers_Found','Feature_Classification_Flags'])
 
 
 def load_collocate_caliop_dataset(calipso_file='',calipso_index='',selected_datasets=''):
