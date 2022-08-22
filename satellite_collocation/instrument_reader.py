@@ -404,6 +404,34 @@ def load_modis_mod02_emission_1km(m02_file='',params={}):
             'Rad33':e33, 'Rad34':e34,
             'Rad35':e35, 'Rad36':e36}
 
+def get_abi_l1b_resolution(channel_number=''):
+    if (channel_number<=0):
+        return -1
+    if (channel_number>16):
+        return -1
+    resolutions = [1,0.5,1,2,1,2,2,2,2,2,2,2,2,2,2,2]
+
+    return resolutions[channel_number-1]
+
+def load_abi_l1b(abi_file='',index_meridional='',index_zonal='',channel_number=''):
+
+    dataset = Dataset(abi_file,'r')
+    Rad = dataset['Rad'][:] 
+    fill_value = dataset.variables['Rad']._FillValue
+
+    Rad[Rad == fill_value] = np.nan
+    if (channel_number<=6):
+        data = Rad * dataset['kappa0'][:]
+    else:
+        fk1 = dataset['planck_fk1'][:]
+        fk2 = dataset['planck_fk2'][:]
+        bc1 = dataset['planck_bc1'][:]
+        bc2 = dataset['planck_bc2'][:]
+        data = (fk2/(np.log((fk1/Rad) + 1)) - bc1)/bc2
+    dataset.close()
+
+    return data[index_meridional,index_zonal]
+
 # function name: load_collocate_abi_dataset
 # purpose: Read 2D ABI dataset(s) into 1D array(s)
 # input: abi_file = {FILENAME}
