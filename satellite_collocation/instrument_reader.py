@@ -226,7 +226,8 @@ def load_caliop_clayer1km_geoloc(cal_1km_file='',params={}):
         n_profile = 0
         profile_dts = list()
 
-    return {'Longitude':cal_lon, 'Latitude':cal_lat, 'IGBP_Type':cal_igbp, 'Snow_Ice_Type':cal_snic, 'Profile_Datetime':np.asarray(profile_dts)}
+    return {'Longitude':cal_lon, 'Latitude':cal_lat, 'IGBP_Type':cal_igbp, 'Snow_Ice_Type':cal_snic, 'Profile_Datetime':np.asarray(profile_dts),
+            'Profile_UTC': cal_utc}
 
 
 # function name: load_viirs_vnp03_geoloc
