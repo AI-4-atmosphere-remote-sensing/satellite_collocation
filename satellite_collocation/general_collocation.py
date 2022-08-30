@@ -305,8 +305,10 @@ def track_disk_collocation_test(track_lat='',track_lon='',track_time='',
 
     if (distances.min() >= dist_threshold):
         #print ('No collocation')
-        return {'disk_index_x':disk_ind_x, 'disk_index_y':disk_ind_y,
-                'disk_track_distance':disk_track_dist}
+        #return {'disk_index_x':disk_ind_x, 'disk_index_y':disk_ind_y,
+        #        'disk_track_distance':disk_track_dist}
+        return {'disk_index_meridional':disk_ind_x, 'disk_index_zonal':disk_ind_y,
+            'disk_track_distance':disk_track_dist}
 
     if_last_pixel_collocated = False
     last_center_x = -1
