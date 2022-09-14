@@ -27,7 +27,7 @@ index_path = args['index_path'].strip()
 save_path = args['save_path'].strip()
 
 #check abi files
-abi_files = sorted(glob.glob(abi_file_path+'OR_ABI-L1b-RadF-M6C01*.nc'))
+abi_files = sorted(glob.glob(abi_file_path+'OR_ABI-L1b-RadF-M?C01*.nc'))
 abi_ranges = []
 abi_stimeflags = []
 
@@ -109,7 +109,7 @@ for index_file in index_files:
         
         #ABI files at this timeframe
         for channel in save_channel:
-            current_abi_files = sorted(glob.glob(abi_file_path+'OR_ABI-L1b-RadF-M6C' + str(channel).zfill(2) + '*_s'+abi_stimeflag+'*.nc'))
+            current_abi_files = sorted(glob.glob(abi_file_path+'OR_ABI-L1b-RadF-M?C' + str(channel).zfill(2) + '*_s'+abi_stimeflag+'*.nc'))
             if (len(current_abi_files)!=1):
                 continue
             current_abi_file = current_abi_files[0]
