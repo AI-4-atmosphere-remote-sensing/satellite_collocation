@@ -9,6 +9,7 @@ import glob
 import datetime
 from datetimerange import DateTimeRange
 import h5py
+import shutil
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -124,6 +125,8 @@ def collocation_abi(index_file,save_path,n_abi_times):
 
     print("Save ABI output file: ",save_path+save_name)
 
+    shutil.move(index_file, index_destination+index_name)
+    
     return "Done extract.\n\n"
 
 
