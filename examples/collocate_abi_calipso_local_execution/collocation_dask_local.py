@@ -15,7 +15,6 @@ import warnings
 warnings.filterwarnings("ignore")
 
 import argparse
-import s3fs
 
 import dask
 from dask.distributed import as_completed
