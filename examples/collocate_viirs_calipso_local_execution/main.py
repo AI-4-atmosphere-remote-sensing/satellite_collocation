@@ -4,6 +4,7 @@ from satellite_collocation import *
 import sys
 import satellite_collocation.instrument_reader as ir
 import satellite_collocation.general_collocation as gc
+import satellite_collocation.version as version
 import numpy as np
 import glob
 import os
@@ -165,11 +166,43 @@ for clayer1km_file in clayer1km_files:
         #save co-location indices to files
         sav_name = 'CAL_' + cal_timeflag + '_VNP_' + vnp_timeflag + '_Index.h5'
         sav_id = h5py.File(save_path+sav_name,'w')
-        sav_id.create_dataset('CALIPSO_Track_Index',data=collocation_indexing['track_index_x'])
-        sav_id.create_dataset('VIIRS_CrossTrack_Index',data=collocation_indexing['swath_index_y'])
-        sav_id.create_dataset('VIIRS_AlongTrack_Index',data=collocation_indexing['swath_index_x'])
-        sav_id.create_dataset('CALIPSO_VIIRS_Distance',data=collocation_indexing['swath_track_distance'])
-        sav_id.create_dataset('CALIPSO_VIIRS_Interval',data=collocation_indexing['swath_track_time_difference'])
+        
+        sav_id.attrs['Version'] = version.version
+        sav_id.attrs['Project'] = version.project_name
+        sav_id.attrs['Task'] = version.task_name
+        sav_id.attrs['Project_PI'] = version.project_pi
+        sav_id.attrs['Project_CoIs'] = version.project_cois
+        sav_id.attrs['Authors'] = version.software_author
+        sav_id.attrs['Contact1'] = version.contact1
+        sav_id.attrs['Contact2'] = version.contact2
+        sav_id.attrs['Description'] = version.description
+        sav_id.attrs['Input_Files'] = cal_name + ',' + os.path.basename(vnp03_files[index])
+        
+        dset_id = sav_id.create_dataset('CALIPSO_Track_Index',data=collocation_indexing['track_index_x'])
+        dset_id.attrs['Description'] = 'CALIPSO Track Indices, start from 0. Negative if unusable.'
+        dset_id.attrs['fillvalue'] = -1
+
+        dset_id = sav_id.create_dataset('VIIRS_CrossTrack_Index',data=collocation_indexing['swath_index_y'])
+        dset_id.attrs['Description'] = 'VIIRS Cross Track Indices, valid range 0 - 3199. Negative if unusable.'
+        dset_id.attrs['fillvalue'] = -1
+
+        dset_id = sav_id.create_dataset('VIIRS_AlongTrack_Index',data=collocation_indexing['swath_index_x'])
+        dset_id.attrs['Description'] = 'VIIRS Along Track Indices, valid range 0 - 3247. Negative if unusable.'
+        dset_id.attrs['fillvalue'] = -1
+
+        dset_id = sav_id.create_dataset('CALIPSO_VIIRS_Distance',data=collocation_indexing['swath_track_distance'])
+        dset_id.attrs['Description'] = 'Distances between CALIPSO and VIIRS pixels in kilometer. Negative if unusable.'
+        dset_id.attrs['fillvalue'] = -9999.99
+
+        dset_id = sav_id.create_dataset('CALIPSO_VIIRS_Interval',data=collocation_indexing['swath_track_time_difference'])
+        dset_id.attrs['Description'] = 'Time interval between CALIPSO and VIIRS pixels in minute. Positive if CALIPSO observes after VIIRS'
+        dset_id.attrs['fillvalue'] = -9999.99
+        
+        #sav_id.create_dataset('CALIPSO_Track_Index',data=collocation_indexing['track_index_x'])
+        #sav_id.create_dataset('VIIRS_CrossTrack_Index',data=collocation_indexing['swath_index_y'])
+        #sav_id.create_dataset('VIIRS_AlongTrack_Index',data=collocation_indexing['swath_index_x'])
+        #sav_id.create_dataset('CALIPSO_VIIRS_Distance',data=collocation_indexing['swath_track_distance'])
+        #sav_id.create_dataset('CALIPSO_VIIRS_Interval',data=collocation_indexing['swath_track_time_difference'])
 
         save_viirs_02_datasets_names = ['VIIRS_M01', 'VIIRS_M02', 'VIIRS_M03',
                                         'VIIRS_M04', 'VIIRS_M05', 'VIIRS_M06',
