@@ -19,7 +19,7 @@ parser.add_argument('-md','--maximum_distance', help='Define the maximum distanc
 parser.add_argument('-mt','--maximum_timeinterval', help='Define the maximum time interval of collocated pixels in minutes', default=15.0)
 parser.add_argument('-sr','--swath_resolution', help='Define the pixel resolution of swath instrument in kilometer', default=0.75)
 parser.add_argument('-tp1','--track_instrument_path1', help='Define the path of CALIPSO L2 1km files', required=True)
-parser.add_argument('-tp5','--track_instrument_path5', help='Define the path of CALIPSO L2 5km files', required=True)
+parser.add_argument('-tp5','--track_instrument_path5', help='Define the path of CALIPSO L2 5km files', default="None")
 parser.add_argument('-sgp','--swath_geo_path', help='Define the path of VIIRS VNP03 files', required=True)
 parser.add_argument('-sdp','--swath_data_path', help='Define the path of VIIRS VNP02 files', required=True)
 parser.add_argument('-sp','--save_path', help='Define the path of output files', default='./')
@@ -61,12 +61,6 @@ for clayer1km_file in clayer1km_files:
     cal_timeflag = cal_name[pos+6:pos+27]
     #print (cal_timeflag)
     
-    #find clayer5km file
-    clayer5km_files = sorted(glob.glob(clayer5km_path+'*'+cal_timeflag+'*.hdf'))
-    if (len(clayer5km_files)!=1):
-        break
-    clayer5km_file = clayer5km_files[0]
-
     clayer1km_geo = ir.load_caliop_clayer1km_geoloc(cal_1km_file=clayer1km_file)
     caliop_dts = clayer1km_geo['Profile_Datetime']
     caliop_timerange = DateTimeRange(caliop_dts[0],caliop_dts[-1])
@@ -119,12 +113,17 @@ for clayer1km_file in clayer1km_files:
                                            'Feature_Classification_Flags']
         
         collocation_index_1km = np.where(caliop_ind>=0)[0]
-        collocation_index_5km = collocation_index_1km//5
+        
         
         caliop_data_1km = ir.load_collocate_caliop_dataset(calipso_file=clayer1km_file,calipso_index=collocation_index_1km,
                       selected_datasets=calipso_dataset_clayer_names_1km)
         
-        calipso_dataset_clayer_names_5km = ['Longitude','Latitude','Layer_Top_Altitude','Layer_Base_Altitude',
+        #find clayer5km file
+        if (clayer5km_path!="None"):
+            clayer5km_files = sorted(glob.glob(clayer5km_path+'*'+cal_timeflag+'*.hdf'))
+            if (len(clayer5km_files)==1):
+                clayer5km_file = clayer5km_files[0]
+                calipso_dataset_clayer_names_5km = ['Longitude','Latitude','Layer_Top_Altitude','Layer_Base_Altitude',
                                            'Layer_Top_Temperature','Layer_Base_Temperature', 'Opacity_Flag',
                                            'Final_532_Lidar_Ratio', 'Integrated_Particulate_Depolarization_Ratio',
                                            'Integrated_Attenuated_Total_Color_Ratio',
@@ -136,9 +135,9 @@ for clayer1km_file in clayer1km_files:
                                            'Column_Optical_Depth_Tropospheric_Aerosols_1064',
                                            'Column_Optical_Depth_Stratospheric_Aerosols_1064',
                                            'Feature_Classification_Flags']
-        
-        caliop_data_5km = ir.load_collocate_caliop_dataset(calipso_file=clayer5km_file,calipso_index=collocation_index_5km,
-                      selected_datasets=calipso_dataset_clayer_names_5km)
+                collocation_index_5km = collocation_index_1km//5
+                caliop_data_5km = ir.load_collocate_caliop_dataset(calipso_file=clayer5km_file,calipso_index=collocation_index_5km,
+                                    selected_datasets=calipso_dataset_clayer_names_5km)
 
         vnp02_file = glob.glob(vnp02_path+'*'+vnp_timeflag+'*.nc')
         if (len(vnp02_file)!=1):
@@ -177,6 +176,8 @@ for clayer1km_file in clayer1km_files:
         sav_id.attrs['Contact2'] = version.contact2
         sav_id.attrs['Description'] = version.description
         sav_id.attrs['Input_Files'] = cal_name + ',' + os.path.basename(vnp03_files[index])
+        sav_id.attrs['CALIPSO_VIIRS_Maximum_Distance_kilometer'] = maximum_distance
+        sav_id.attrs['CALIPSO_VIIRS_Maximum_Interval_minute'] = maximum_interval
         
         dset_id = sav_id.create_dataset('CALIPSO_Track_Index',data=collocation_indexing['track_index_x'])
         dset_id.attrs['Description'] = 'CALIPSO Track Indices, start from 0. Negative if unusable.'
@@ -198,12 +199,6 @@ for clayer1km_file in clayer1km_files:
         dset_id.attrs['Description'] = 'Time interval between CALIPSO and VIIRS pixels in minute. Positive if CALIPSO observes after VIIRS'
         dset_id.attrs['fillvalue'] = -9999.99
         
-        #sav_id.create_dataset('CALIPSO_Track_Index',data=collocation_indexing['track_index_x'])
-        #sav_id.create_dataset('VIIRS_CrossTrack_Index',data=collocation_indexing['swath_index_y'])
-        #sav_id.create_dataset('VIIRS_AlongTrack_Index',data=collocation_indexing['swath_index_x'])
-        #sav_id.create_dataset('CALIPSO_VIIRS_Distance',data=collocation_indexing['swath_track_distance'])
-        #sav_id.create_dataset('CALIPSO_VIIRS_Interval',data=collocation_indexing['swath_track_time_difference'])
-
         save_viirs_02_datasets_names = ['VIIRS_M01', 'VIIRS_M02', 'VIIRS_M03',
                                         'VIIRS_M04', 'VIIRS_M05', 'VIIRS_M06',
                                         'VIIRS_M07', 'VIIRS_M08', 'VIIRS_M09',
@@ -213,6 +208,7 @@ for clayer1km_file in clayer1km_files:
 
         for viirs_02_dataset in viirs_02_datasets:
             sav_id.create_dataset(viirs_02_dataset,data=viirs_data_narrow_belt[viirs_02_dataset])
+                     
         sav_id.close()
 
        
