@@ -88,3 +88,7 @@ This example explains how to run the collocation code on AWS.
 Prerequisites:
 1. The user has AWS account and credentials to run Lambda functions.
 2. The user has access to an AWS EC2 instance where the collocation code can execute.
+
+### 4. Run CALIPSO-ABI Collocation in Parallel via Dask on AWS (collocate_abi_calipso_dask_aws)
+This example explains how to run the collocation code on AWS by using the [RPAC toolkit](https://github.com/big-data-lab-umbc/Reproducible_and_portable_app_in_cloud).
+
