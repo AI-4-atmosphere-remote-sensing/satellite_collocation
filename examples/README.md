@@ -92,3 +92,18 @@ Prerequisites:
 ### 4. Run CALIPSO-ABI Collocation in Parallel via Dask on AWS (collocate_abi_calipso_dask_aws)
 This example explains how to run the collocation code on AWS by using the [RPAC toolkit](https://github.com/big-data-lab-umbc/Reproducible_and_portable_app_in_cloud).
 
+#### 4.1 Prerequisites:
+- The user has AWS account and credentials to run Lambda functions.
+- The user has access to an AWS EC2 instance where the collocation code can execute.
+- The user has the [RPAC toolkit](https://github.com/big-data-lab-umbc/Reproducible_and_portable_app_in_cloud) and its prerequisites in their local machine.
+
+#### 4.2 Run the Example Code:
+Step 1: Use the example configuration files and update the default configurations resource.ini, application.ini, personal.ini in ConfigTemplate folder.
+```
+>> cp -rf Reproducible_and_portable_app_in_cloud/examples/SatelliteCollocationViaDask/* Reproducible_and_portable_app_in_cloud/ConfigTemplate/
+```
+Step 2: Run python3 main.py to execute the big data analytics.
+```
+>> python3 main.py
+```
+Step 3: Check the application status from [link](https://us-west-2.console.aws.amazon.com/cloudformation/home?region=us-west-2). Please see other detailed information and debugging from [link](https://github.com/big-data-lab-umbc/Reproducible_and_portable_app_in_cloud/blob/main/README.md).
