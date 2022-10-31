@@ -71,7 +71,7 @@ In this page you can simply follow the image. First select **Author from scratch
 ***note:*** If you wanto use any previously created **role** you can simply skip Step1 and start from step2.
 ![text-here](./APIGateway_Images_dev/11.png)
 
-Now you are redirected to the Lambda console where you can deploy your code in the **Code Source** box. A sample code is given that prints __Hello From Lambda!__.
+Now you are redirected to the Lambda console where you can deploy your code in the **Code Source** box. A sample code is given that prints __Hello From Lambda!__. However, the main codes are ```service_1_trigger_lambda_to_execute.py``` which is used to trigger a lambda event that executes the predefind model in EC2, and ```service_2_trigger_lambda_to_copy_files_to_S3.py``` is another event to copy the results files to a S3 bucket. 
 
 ![text-here](./APIGateway_Images_dev/12.png)
 
