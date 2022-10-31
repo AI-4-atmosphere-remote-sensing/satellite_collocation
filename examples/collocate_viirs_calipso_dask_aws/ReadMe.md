@@ -71,7 +71,9 @@ In this page you can simply follow the image. First select **Author from scratch
 ***note:*** If you wanto use any previously created **role** you can simply skip Step1 and start from step2.
 ![text-here](./APIGateway_Images_dev/11.png)
 
-Now you are redirected to the Lambda console where you can deploy your code in the **Code Source** box. A sample code is given that prints __Hello From Lambda!__. However, the main codes are ```service_1_trigger_lambda_to_execute.py``` which is used to trigger a lambda event that executes the predefind model in EC2, and ```service_2_trigger_lambda_to_copy_files_to_S3.py``` is another event to copy the results files to a S3 bucket. 
+Now you are redirected to the Lambda console where you can deploy your code in the **Code Source** box. A sample code is given that prints __Hello From Lambda!__. 
+
+In this example, we deployed two seperate Lambda functions following ***Step2- Lambda Function*** to trigger two separate events, one is to execute the pre-deployed Machine Learning model in EC2 using ```service_1_trigger_lambda_to_execute.py``` and another one to copy the result files to the corresponding S3 bucket using ```service_2_trigger_lambda_to_copy_files_to_S3.py```. User can simply copy the Python file contents and paste it to the Lambda console and follow the rest of the processes to make it work.
 
 ![text-here](./APIGateway_Images_dev/12.png)
 
