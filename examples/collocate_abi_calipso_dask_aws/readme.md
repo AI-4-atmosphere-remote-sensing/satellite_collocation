@@ -24,7 +24,7 @@ Amazon EC2 (Elastic Compute Cloud) is a web-based service that allows businesses
 Go to **www.aws.amazon.com** to **sign in** to the console (on top right corner) using your credentials (username, password, etc.).
 Once you are logged in, select the right **Region** (on top right corner) in which you want your deploy your desired services. If this is a new account, default region would work.
 
-## ***Step1 IAM (Identity Access Management)***
+## ***Step1- IAM (Identity Access Management)***
 ### --IAM Dashboard--
 Go to the **Services** (with 9 dots), click **Security, Identity & Compliance** and choose **IAM** on the right panel. Or, alternatively search for IAM and choose IAM from the services.
 
@@ -53,7 +53,7 @@ In **Role details**, enter a **Role name** and click **Create role** (blue butto
 
 ![text-here](./APIGateway_Images_dev/7.png)
 
-## ***Step2 Lambda Function***
+## ***Step2- Lambda Function***
 ###  --Create a Lambda function--
 
 Choose Lambda from either servies (_services > Compute > Lambda_) or search for Lambda to go to the Lambda function page.
@@ -99,7 +99,7 @@ Here you can type full policy name or a part of it (correcly) and hit return in 
 
 ![text-here](./APIGateway_Images_dev/18.png)
 
-## ***Step1 AWS API Gateway***
+## ***Step3- AWS API Gateway***
 ### --Create API--
 
 Click the **Services** _(with 9 dots)_ and choose **Networking & Content Delivery** from the dropdown, then on the right panel you will see **API Gatway**. Alternatively, type **API Gateway** in the search box _(second image)_, click on the **API Gateway**.
