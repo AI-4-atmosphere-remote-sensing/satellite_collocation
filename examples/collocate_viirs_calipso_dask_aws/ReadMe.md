@@ -19,7 +19,7 @@ which refers to the reading, updating, creating and deleting of operations conce
 ## _What is AWS EC2:_
 Amazon EC2 (Elastic Compute Cloud) is a web-based service that allows businesses to run application programs in the AWS public cloud. EC2 enables developer to configure virtual machines (VMs) to provide compute capacity and workloads are distributed through global AWS data centers. EC2 is capable of increasing or decreasing instance capacity as needed.
 
-## _This tutorial requires pre-configured EC2 instance and a pre-built model deployed in EC2. It shows how to configure the IAM, Lambda and API Gateway step-by-step.
+## _This tutorial requires pre-configured EC2 instance and a pre-built model deployed in EC2. It shows how to configure the IAM, Lambda and API Gateway step-by-step._
 
 <!-- does not include how to deploy models in EC2, is about deployment of aws services that incorporates aws EC2 instance, Lambda function and API Gateway. We have pre-deployed deep learning application in EC2 which is triggered by a Lambda Function. API Gateway provides the link to call the Lambda function that triggers an event to run application on EC2._ 
 
