@@ -5,7 +5,6 @@ In this example, we deployed two seperate Lambda functions to trigger two separa
 
 <!---
 This document explains RESTFul service provisioning on top of AWS cloud services. If a user has a program/software that is executable on an AWS EC2 instance, this document shows step-by-step instructions on how to create RESTFul services so other users could run the program/software via HTTP GET/POST methods. The RESTFul services are created via AWS Lambda and API Gateway Services.
--->
 
 ## _What is AWS Lambda Functionon:_
 AWS Lambda is a serverless compute service that can run any sort of code without having to provision or manage servers. Lambda runs your code on highly available compute infrastructure and performs all of the administration of computing resources, capacity provisioning, automated scaling, monitoring, and logging.
@@ -18,7 +17,7 @@ which refers to the reading, updating, creating and deleting of operations conce
 
 ## _What is AWS EC2:_
 Amazon EC2 (Elastic Compute Cloud) is a web-based service that allows businesses to run application programs in the AWS public cloud. EC2 enables developer to configure virtual machines (VMs) to provide compute capacity and workloads are distributed through global AWS data centers. EC2 is capable of increasing or decreasing instance capacity as needed.
-
+-->
 ## _This tutorial requires pre-configured EC2 instance and a pre-built model deployed in EC2. It shows how to configure the IAM, Lambda and API Gateway step-by-step._
 
 <!-- does not include how to deploy models in EC2, is about deployment of aws services that incorporates aws EC2 instance, Lambda function and API Gateway. We have pre-deployed deep learning application in EC2 which is triggered by a Lambda Function. API Gateway provides the link to call the Lambda function that triggers an event to run application on EC2._ 
