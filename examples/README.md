@@ -85,9 +85,21 @@ collocation_dask_slurm.py shows how to utilize Dask to run in parallel via separ
 ### 3. Run CALIPSO-VIIRS Collocation in Parallel via Dask on AWS (collocate_viirs_calipso_dask_aws)
 This example explains how to run the collocation code on AWS.
 
-Prerequisites:
+#### 3.1 Prerequisites:
 1. The user has AWS account and credentials to run Lambda functions.
 2. The user has access to an AWS EC2 instance where the collocation code can execute.
+
+#### 3.2 Create the Lambda Function:
+Step 1: Follow the steps in ___Step2- Lambda Function___ from [this link](https://github.com/AI-4-atmosphere-remote-sensing/satellite_collocation/tree/main/examples/collocate_viirs_calipso_dask_aws) to create a lamda function.
+
+Step 2: Copy the [example code like this](https://github.com/AI-4-atmosphere-remote-sensing/satellite_collocation/blob/main/examples/collocate_viirs_calipso_dask_aws/service_1_trigger_lambda_to_execute.py) and paste in the **_Lambda Console_** and Save it.
+
+#### 3.3 Create the API:
+Step 1: Follow the steps in ___Step3- AWS API Gateway___ from [this link](https://github.com/AI-4-atmosphere-remote-sensing/satellite_collocation/tree/main/examples/collocate_viirs_calipso_dask_aws) to create an API.
+
+Step 2: Click the _**API Endpoint link**_ to execute the model in the EC2
+
+#### Note: To copy the results from EC2 to S3 bucket repeat the process _3.2_ to create Lambda Function using [this sample code](https://github.com/AI-4-atmosphere-remote-sensing/satellite_collocation/blob/main/examples/collocate_viirs_calipso_dask_aws/service_2_trigger_lambda_to_copy_files_to_S3.py) and _3.3_ to create an API.
 
 ### 4. Run CALIPSO-ABI Collocation in Parallel via Dask on AWS (collocate_abi_calipso_dask_aws)
 This example explains how to run the collocation code on AWS by using the [RPAC toolkit](https://github.com/big-data-lab-umbc/Reproducible_and_portable_app_in_cloud).
