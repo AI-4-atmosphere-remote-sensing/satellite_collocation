@@ -158,15 +158,15 @@ The new pop-up will ask for Deployment Stage, just select the **[New Stage]** an
 
 ![text-here](./APIGateway_Images_dev/31.png)
 
-At this point you will be able to see a link but we will not use this one but the other one!
+At this point you will see a link _but_ we will not use this one but the next one!
 
 ![text-here](./APIGateway_Images_dev/32.png)
 
-On the Stage, click the **v1** dropdown and select **GET**, the API link will appear on the right pannel. This is our final API. You can just click it and it will do the job! For later use, you can save this link somewhere.
+On the Stage, click the **v1** dropdown and select **GET**, the API link will appear on the right pannel. This is our final API. You can just click it and it will do what it is supposed to do! You can save this link somewhere for later use.
 
 ![text-here](./APIGateway_Images_dev/33.png)
 
-You can also go to your Lambda function and you will see now the API Gateway in details is here now. It means the API gateway can use this lambda function as a trigger.
+As an alternative, you can find the link associated with your Lambda by selecting the Lambda Function as follows.
 
 ![text-here](./APIGateway_Images_dev/34.png)
 
