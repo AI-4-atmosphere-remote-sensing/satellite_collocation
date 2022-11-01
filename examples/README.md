@@ -99,7 +99,7 @@ Step 1: Follow the steps in ___Step3- AWS API Gateway___ from [this link](https:
 
 Step 2: Click the _**API Endpoint link**_ to execute the model in the EC2
 
-#### Note: To copy the results from EC2 to S3 bucket repeat the process _3.2_ to create Lambda Function using [this sample code](https://github.com/AI-4-atmosphere-remote-sensing/satellite_collocation/blob/main/examples/collocate_viirs_calipso_dask_aws/service_2_trigger_lambda_to_copy_files_to_S3.py) and _3.3_ to create an API.
+Note: To copy the results from EC2 to S3 bucket repeat the process _3.2_ to create Lambda Function using [this sample code](https://github.com/AI-4-atmosphere-remote-sensing/satellite_collocation/blob/main/examples/collocate_viirs_calipso_dask_aws/service_2_trigger_lambda_to_copy_files_to_S3.py) and _3.3_ to create an API.
 
 ### 4. Run CALIPSO-ABI Collocation in Parallel via Dask on AWS (collocate_abi_calipso_dask_aws)
 This example explains how to run the collocation code on AWS by using the [RPAC toolkit](https://github.com/big-data-lab-umbc/Reproducible_and_portable_app_in_cloud).
