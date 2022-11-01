@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser(description='This code is an example of colloca
 parser.add_argument('-md','--maximum_distance', help='Define the maximum distance of collocated pixels in kilometer', default=5.0)
 parser.add_argument('-mt','--maximum_timeinterval', help='Define the maximum time interval of collocated pixels in minutes', default=15.0)
 parser.add_argument('-sr','--swath_resolution', help='Define the pixel resolution of swath instrument in kilometer', default=0.75)
-parser.add_argument('-tp1','--track_instrument_path1', help='Define the path of CALIPSO L2 1km files', required=True)
+parser.add_argument('-tp','--track_instrument_path1', help='Define the path of CALIPSO L2 1km files', required=True)
 parser.add_argument('-tp5','--track_instrument_path5', help='Define the path of CALIPSO L2 5km files', default="None")
 parser.add_argument('-sgp','--swath_geo_path', help='Define the path of VIIRS VNP03 files', required=True)
 parser.add_argument('-sdp','--swath_data_path', help='Define the path of VIIRS VNP02 files', required=True)
