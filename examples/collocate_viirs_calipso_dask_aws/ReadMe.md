@@ -167,12 +167,10 @@ On the Stage, click the **v1** dropdown and select **GET**, the API link will ap
 
 ![text-here](./APIGateway_Images_dev/33.png)
 
-You can also go to your Lambda function and you will see now the API Gateway is details is here now. It means the API gateway can use this lambda function as a trigger.
+You can also go to your Lambda function and you will see now the API Gateway in details is here now. It means the API gateway can use this lambda function as a trigger.
 
 ![text-here](./APIGateway_Images_dev/34.png)
 
-Finally, if you click or copy and paste the link to your browser you can see your desired action!
+Finally, you can click the the link that will execute the Lambda. Alternatively, you can copy the link, paste in a browser and execute will do the same. In either cases you can see some results in the browser as follows.
 
 ![text-here](./APIGateway_Images_dev/35.png)
-
-***We are all set!***
