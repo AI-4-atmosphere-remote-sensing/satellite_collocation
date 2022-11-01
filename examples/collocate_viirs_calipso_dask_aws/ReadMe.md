@@ -1,7 +1,7 @@
 
 # Satellite Collocation using AWS Lambda and API Gateway Services
 
-In this example, we deployed two seperate Lambda functions to trigger two separate events. One is to execute the pre-deployed Machine Learning model in EC2 using ```service_1_trigger_lambda_to_execute.py``` and another one to copy the results from EC2 to corresponding S3 bucket using ```service_2_trigger_lambda_to_copy_files_to_S3.py```. The rest of the tutorial explains how to do the satellite collocation using the Lambda Function and API Gateway RESTFul services.
+In this example, we deployed two seperate Lambda functions to trigger two separate events. One is to execute the pre-deployed Machine Learning model in EC2 using ```service_1_trigger_lambda_to_execute.py``` and another one to copy the results from EC2 to corresponding S3 bucket using ```service_2_trigger_lambda_to_copy_files_to_S3.py```. The rest of the tutorial explains how to do the satellite collocation using the Lambda Function and RESTFul API Gateway  services.
 
 <!---
 This document explains RESTFul service provisioning on top of AWS cloud services. If a user has a program/software that is executable on an AWS EC2 instance, this document shows step-by-step instructions on how to create RESTFul services so other users could run the program/software via HTTP GET/POST methods. The RESTFul services are created via AWS Lambda and API Gateway Services.
@@ -19,10 +19,12 @@ which refers to the reading, updating, creating and deleting of operations conce
 ## _What is AWS EC2:_
 Amazon EC2 (Elastic Compute Cloud) is a web-based service that allows businesses to run application programs in the AWS public cloud. EC2 enables developer to configure virtual machines (VMs) to provide compute capacity and workloads are distributed through global AWS data centers. EC2 is capable of increasing or decreasing instance capacity as needed.
 
-## _This tutorial is about deployment of aws services that incorporates aws EC2 instance, Lambda function and API Gateway. We have pre-deployed deep learning application in EC2 which is triggered by a Lambda Function. API Gateway provides the link to call the Lambda function that triggers an event to run application on EC2._
+## _This tutorial requires pre-configured EC2 instance and a pre-built model deployed in EC2. It shows how to configure the IAM, Lambda and API Gateway step-by-step.
+
+<!-- does not include how to deploy models in EC2, is about deployment of aws services that incorporates aws EC2 instance, Lambda function and API Gateway. We have pre-deployed deep learning application in EC2 which is triggered by a Lambda Function. API Gateway provides the link to call the Lambda function that triggers an event to run application on EC2._ 
 
 ### ***To accomplish this process we need to go through configuring three (3) aws services including IAM, Lambda and API Gateway in various steps. This tutorial provides step by step configuration guidline.***
-
+-->
 ## ***Login and selecting the region***
 
 Go to **www.aws.amazon.com** to **sign in** to the console (on top right corner) using your credentials (username, password, etc.).
