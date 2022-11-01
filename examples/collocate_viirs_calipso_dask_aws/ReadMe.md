@@ -1,7 +1,9 @@
 
 # Satellite Collocation using AWS Lambda and API Gateway Services
 
-This document explains RESTFul service provisioning on top of AWS cloud services. If a user has a program/software that is executable on an AWS EC2 instance, this document shows step-by-step instructions on how to create RESTFul services so other users could run the program/software via HTTP GET/POST methods. The RESTFul services are created via AWS Lambda and API Gateway Services.
+In this example, we deployed two seperate Lambda functions to trigger two separate events. One is to execute the pre-deployed Machine Learning model in EC2 using ```service_1_trigger_lambda_to_execute.py``` and another one to copy the results from EC2 to corresponding S3 bucket using ```service_2_trigger_lambda_to_copy_files_to_S3.py```. The rest of the tutorial explains how to do the satellite collocation using the Lambda Function and API Gateway RESTFul services.
+
+<This document explains RESTFul service provisioning on top of AWS cloud services. If a user has a program/software that is executable on an AWS EC2 instance, this document shows step-by-step instructions on how to create RESTFul services so other users could run the program/software via HTTP GET/POST methods. The RESTFul services are created via AWS Lambda and API Gateway Services.>
 
 ## _What is AWS Lambda Functionon:_
 AWS Lambda is a serverless compute service that can run any sort of code without having to provision or manage servers. Lambda runs your code on highly available compute infrastructure and performs all of the administration of computing resources, capacity provisioning, automated scaling, monitoring, and logging.
