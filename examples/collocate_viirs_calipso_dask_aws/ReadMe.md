@@ -1,5 +1,5 @@
 
-# How to Create RESTFul Services using AWS Lambda and API Gateway Services to launch EC2 based execution
+# Satellite Collocation using AWS Lambda and API Gateway Services
 
 This document explains RESTFul service provisioning on top of AWS cloud services. If a user has a program/software that is executable on an AWS EC2 instance, this document shows step-by-step instructions on how to create RESTFul services so other users could run the program/software via HTTP GET/POST methods. The RESTFul services are created via AWS Lambda and API Gateway Services.
 
