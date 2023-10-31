@@ -83,7 +83,7 @@ collocation_dask_slurm.py shows how to utilize Dask to run in parallel via separ
 ```
 
 ### 3. Run CALIPSO-VIIRS Collocation in Parallel via Dask on AWS (collocate_viirs_calipso_dask_aws)
-This example explains how to run the collocation code on AWS.
+This example explains how to run the collocation code on AWS. More detailed steps can be found at [collocate_viirs_calipso_dask_aws](collocate_viirs_calipso_dask_aws) directory.
 
 #### 3.1 Prerequisites:
 1. The user has AWS account and credentials to run Lambda functions.
