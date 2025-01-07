@@ -1,0 +1,16 @@
+1. **Download [CALIPSO data](https://search.earthdata.nasa.gov/search/granules?p=C1556717898-LARC_ASDC&pg[0][v]=f&pg[0][gsk]=-start_date&q=cal_lid_l2_01kmclay&tl=1707754578.127!3!!&lat=-0.0703125&long=-0.0703125)**
+	1. Product name: CALIPSO Lidar Level 2 1 km Cloud Layer, V4-20
+	2. Time span: I downloaded 2017-11-01 ~ 2017-11-30 data
+	3. Save path: /umbc/rs/nasa-access/data/calipso_data/CAL_LID_L2_01kmCLay/2017-01-01
+	4. Download by bash file: follow the instructions on the earthdata download page
+2. **Download ABI data**
+	1. Product name: OR_ABI-L1b-RadF: [https://docs.opendata.aws/noaa-goes16/cics-readme.html](https://docs.opendata.aws/noaa-goes16/cics-readme.html) 
+	2. Time span: I downloaded 2017-305 ~ 2017-335 data (the same time range with CALIPSO data)
+	3. Save path: /umbc/rs/nasa-access/users/xingyan/abi_data/2017/
+	4. Download by aws cli: 
+```
+	aws s3 cp s3://noaa-goes16/ABI-L1b-RadF/2017/305 /umbc/rs/nasa-access/users/xingyan/abi_data/2017/ --recursive
+```
+    
+3. **Run code to generated index for CALIPSO-ABI collocation**
+4. **Run code to extract CALIPSO-ABI collocation data with the generated index**
