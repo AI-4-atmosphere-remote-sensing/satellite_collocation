@@ -27,7 +27,7 @@ Run python file *generate_collocation_index.py* to generated index for CALIPSO-A
 
 Run code to extract CALIPSO-ABI collocation data with the generated index. On [taki cluster](https://hpcf.umbc.edu/system-description-taki/), a SLURM file is required to submit jobs. We provide the SLURM file, which can be submitted in terminal by running:
 
-`sbatch generate_index.slurm`
+`sbatch extract_abidata.slurm`
 
 Please edit following variable values in the slurm file: ABI_PATH, ABI_L2_PATH, INDEX_PATH, SAVE_PATH
 
