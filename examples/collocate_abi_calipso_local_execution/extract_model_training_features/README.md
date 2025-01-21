@@ -2,6 +2,7 @@
 
 *Update: Currently, there are three separate sessions to complete ABI-CALIIOP collocation, which means submitting three jobs separately. We will update a new version with only one session.*
 
+The full list of the features extracted from the data: [Google Drive](https://docs.google.com/spreadsheets/d/1Fu6tVD2mG-Z0S1rDVR0p6GkAZs9yHmOLuE_8ljYsn7E/edit?gid=639358745#gid=639358745)
 ## Data Downloading
 
 1. **Download [CALIPSO data](https://search.earthdata.nasa.gov/search/granules?p=C1556717898-LARC_ASDC&pg[0][v]=f&pg[0][gsk]=-start_date&q=cal_lid_l2_01kmclay&tl=1707754578.127!3!!&lat=-0.0703125&long=-0.0703125)**
