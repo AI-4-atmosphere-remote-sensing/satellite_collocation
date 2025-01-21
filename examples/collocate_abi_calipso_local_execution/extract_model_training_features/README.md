@@ -11,8 +11,8 @@
    4. Download by bash file: follow the instructions on the earthdata download page
 2. **Download [ABI data](https://www.goes-r.gov/spacesegment/abi.html)**
    1. Product name
-      1. OR_ABI-L1b-RadF: [https://docs.opendata.aws/noaa-goes16/cics-readme.html](https://docs.opendata.aws/noaa-goes16/cics-readme.html)
-      2.  
+      1. [OR_ABI-L1b-RadF](https://docs.opendata.aws/noaa-goes16/cics-readme.html](https://docs.opendata.aws/noaa-goes16/cics-readme.html)
+      2. [ABI-L2-ACTPF](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ncdc:C01504)
    2. Time span: I downloaded 2017-305 ~ 2017-335 data (the same time range with CALIPSO data)
    3. Save path: /umbc/rs/nasa-access/users/xingyan/abi_data/2017/
    4. Download by aws cli: 
